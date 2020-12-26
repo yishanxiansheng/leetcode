@@ -1,4 +1,4 @@
-package com.cmrh.msp.android.msp.msp;
+package com.example.testmaven;
 
 import android.content.Intent;
 
@@ -18,14 +18,54 @@ import java.util.Stack;
 
 public class TestTreeNode {
     public static void main(String[] args) {
-        TreeNode node = new TreeNode(1);
-        node.left = new TreeNode(2);
-        TreeNode node1 = new TreeNode(3);
-        node1.left = new TreeNode(4);
-        node1.right = new TreeNode(5);
-        node.right = node1;
+        LinkedList<Integer> linkedList = new LinkedList<>(Arrays.asList(
+                new Integer[]{3, 2, 9, null, null, 10, null, 8, null, 4}));
+        TreeNode node2 = createBianryTree(linkedList);
+        System.out.println(serialize(node2));
+        preOrderTraveralWithStack(node2);
+    }
 
-        System.out.println(serialize(node));
+    public static void preOrderTraveralWithStack(TreeNode treeNode) {
+        if (treeNode == null) {
+            return;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(treeNode);
+        TreeNode node = stack.peek();
+        while (!stack.empty()) {
+            while (node != null) {
+                //入栈之前打印
+                System.out.println(node.val);
+                stack.push(node);
+                node = node.left;
+            }
+
+            if (!stack.empty()) {
+                node = stack.pop();
+                node = node.right;
+
+            }
+        }
+    }
+
+    /**
+     * 构造完全二叉树
+     *
+     * @return
+     */
+    public static TreeNode createBianryTree(LinkedList<Integer> inputLists) {
+        TreeNode node = null;
+        if (inputLists == null || inputLists.size() == 0) {
+            return null;
+        }
+        Integer data = inputLists.removeFirst();
+        if (data != null) {
+            node = new TreeNode(data);
+            node.left = createBianryTree(inputLists);
+            node.right = createBianryTree(inputLists);
+        }
+
+        return node;
     }
 
     /**
@@ -701,28 +741,31 @@ public class TestTreeNode {
 
     /**
      * 序列化二叉树
+     *
      * @param root
      * @return
      */
     public static StringBuffer result = new StringBuffer();
+
     public static String serialize(TreeNode root) {
         result.append("[");
         serializeHelper(root);
         result.append("]");
         return result.toString();
     }
+
     public static void serializeHelper(TreeNode root) {
-        if (root == null){
+        if (root == null) {
             result.append(",null");
             return;
         }
-        result.append(root.val+",");
+        result.append(root.val + ",");
         serializeHelper(root.left);
         serializeHelper(root.right);
     }
 
     // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
-        return  null;
+        return null;
     }
 }

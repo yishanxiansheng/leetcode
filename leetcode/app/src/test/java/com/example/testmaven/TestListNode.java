@@ -1,8 +1,6 @@
-package com.cmrh.msp.android.msp.msp;
 
-import android.view.LayoutInflater;
+package com.example.testmaven;
 
-import com.cmrh.msp.android.msp.msp.NodeUtil.ListNode;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,10 +8,11 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
+import com.example.testmaven.NodeUtil.ListNode;
 
 public class TestListNode {
     public static void main(String[] args) {
-        ListNode node = new ListNode(1);
+        NodeUtil.ListNode node = new ListNode(1);
         node.next = new ListNode(2);
         node.next.next = new ListNode(3);
         node.next.next.next = new ListNode(4);

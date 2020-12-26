@@ -1,11 +1,9 @@
-package com.cmrh.msp.android.msp.msp;
-
-import com.cmrh.msp.android.msp.msp.NodeUtil.ListNode;
+package com.example.testmaven;
 
 import java.util.Stack;
 
-import static com.cmrh.msp.android.msp.msp.NodeUtil.createListNode;
-import static com.cmrh.msp.android.msp.msp.NodeUtil.printListNode;
+import static com.example.testmaven.NodeUtil.createListNode;
+import static com.example.testmaven.NodeUtil.printListNode;
 
 /**
  * @author hesf001
@@ -15,7 +13,7 @@ import static com.cmrh.msp.android.msp.msp.NodeUtil.printListNode;
 public class ReTestListNode {
 
     public static void main(String[] args) {
-        ListNode node = createListNode(new int[]{1, 2, 3, 4, 5});
+        NodeUtil.ListNode node = createListNode(new int[]{1, 2, 3, 4, 5});
         printListNode(deleteNode(node, 1));
     }
 
@@ -26,13 +24,13 @@ public class ReTestListNode {
      * @param val
      * @return
      */
-    public static ListNode deleteNode(ListNode head, int val) {
-        ListNode delete = head;
+    public static NodeUtil.ListNode deleteNode(NodeUtil.ListNode head, int val) {
+        NodeUtil.ListNode delete = head;
         if (head.val == val) {
             return head.next;
         }
         while (delete.next != null) {
-            ListNode temp = delete.next;
+            NodeUtil.ListNode temp = delete.next;
             if (temp.val == val) {
                 delete.next = temp.next;
                 temp.next = null;
@@ -47,16 +45,16 @@ public class ReTestListNode {
     /**
      * 链表翻转
      */
-    public static ListNode reverseListNode(ListNode node) {
-        ListNode current = node;
-        ListNode head = null;
+    public static NodeUtil.ListNode reverseListNode(NodeUtil.ListNode node) {
+        NodeUtil.ListNode current = node;
+        NodeUtil.ListNode head = null;
 
         if (node == null || node.next == null) {
             return node;
         }
 
         while (current != null) {
-            ListNode next = current.next;
+            NodeUtil.ListNode next = current.next;
             current.next = head;
             head = current;
             current = next;
@@ -71,9 +69,9 @@ public class ReTestListNode {
      * @param k
      * @return
      */
-    public ListNode getKthFromEnd(ListNode head, int k) {
-        ListNode slow = head;
-        ListNode fast = head;
+    public NodeUtil.ListNode getKthFromEnd(NodeUtil.ListNode head, int k) {
+        NodeUtil.ListNode slow = head;
+        NodeUtil.ListNode fast = head;
         while (k > 1 && fast != null) {
             fast = fast.next;
             k--;
@@ -92,7 +90,7 @@ public class ReTestListNode {
      * @param head
      * @return
      */
-    public int[] reversePrint(ListNode head) {
+    public int[] reversePrint(NodeUtil.ListNode head) {
         Stack<Integer> stack = new Stack<>();
         while (head != null) {
             stack.push(head.val);
@@ -113,9 +111,9 @@ public class ReTestListNode {
      * @param headB
      * @return
      */
-    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        ListNode node1 = headA;
-        ListNode node2 = headB;
+    public NodeUtil.ListNode getIntersectionNode(NodeUtil.ListNode headA, NodeUtil.ListNode headB) {
+        NodeUtil.ListNode node1 = headA;
+        NodeUtil.ListNode node2 = headB;
         //两个没有结果的链表循环结束后的结果为node1与node2都指向了null
         while (node1 != node2) {
             node1 = node1 == null?headB:node1.next;

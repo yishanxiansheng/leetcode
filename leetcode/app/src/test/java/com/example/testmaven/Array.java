@@ -1,4 +1,8 @@
-package com.cmrh.msp.android.msp.msp;
+package com.example.testmaven;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 /**
  * @author hesf001
@@ -8,8 +12,23 @@ package com.cmrh.msp.android.msp.msp;
 public class Array {
 
     public static void main(String[] args) {
-        int[] array = new int[]{999999998,999999997,999999999};
-        minNumber(array);
+        int[] array = new int[]{999999998, 999999997, 999999999};
+//        minNumber(array);
+        //将application/x-www-form-urlencoded字符串转换成普通字符串
+        //采用UTF-8字符集进行解码
+        try {
+            System.out.println(URLDecoder.decode("%E5%8C%97%E4%BA%AC%E5%A4%A7%E5%AD%A6", "UTF-8"));
+            //采用GBK字符集进行解码
+            System.out.println(URLDecoder.decode("%B1%B1%BE%A9%B4%F3%D1%A7", "GBK"));
+
+            // 将普通字符串转换成application/x-www-form-urlencoded字符串
+            //采用utf-8字符集
+            System.out.println(URLEncoder.encode("北京大学", "UTF-8"));
+            //采用GBK字符集
+            System.out.println(URLEncoder.encode("北京大学", "GBK"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -158,7 +177,7 @@ public class Array {
         while (i < j) {
             //找到比temp小的
             while (i < j && Integer.parseInt(temp + "" + numString[j]) <= Integer.parseInt(numString[j] + "" + temp)) {
-                    j--;
+                j--;
             }
             //找到比temp大的
             while (i < j && Integer.parseInt(temp + "" + numString[i]) >= Integer.parseInt(numString[i] + "" + temp)) {
@@ -174,5 +193,70 @@ public class Array {
         numString[i] = temp;
         minNumberHelper(numString, left, i - 1);
         minNumberHelper(numString, i + 1, right);
+    }
+
+    /**
+     * 数组中数字出现的次数   找出只出现一次的两个数字
+     * 时间复杂度为0（n） 空间复杂度为o(1)
+     * 相同的值进行异或结果为0，不相同的值进行异或操作结果不为0
+     * 0与任何值进行异或为该值
+     *
+     * @param nums
+     * @return
+     */
+    public int[] singleNumbers(int[] nums) {
+        int ret = 0;
+        for (int i = 0; i < nums.length; i++) {
+            //所有的值进行异或操作
+            ret ^= nums[i];
+        }
+        int div = 1;
+        while ((ret & div) == 0) {
+            //找到ret中为1 的那位
+            //左移一位
+            div = div << 1;
+        }
+
+        int a = 0, b = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if ((div & nums[i]) == 0) {
+                a ^= nums[i];
+            } else {
+                b ^= nums[i];
+            }
+        }
+        return new int[]{a, b};
+    }
+
+    /**
+     * x的n次方
+     * @param x
+     * @param n
+     * @return
+     */
+    public double myPow(double x, int n) {
+        if (n > 0){
+            if (n == 1){
+                return x;
+            }
+            return x*myPow(x,n-1);
+        }else if (n<0){
+            if (n == -1){
+                return 1/x;
+            }
+            return 1/x*myPow(x,n+1);
+        }else {
+            return 0;
+        }
+    }
+
+    /**
+     * n个骰子
+     * @param n
+     * @return
+     */
+    public double[] twoSum(int n) {
+        double[] result = new double[5*n+1];
+        return null;
     }
 }

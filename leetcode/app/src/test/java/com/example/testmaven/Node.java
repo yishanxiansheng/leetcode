@@ -1,4 +1,4 @@
-package com.cmrh.msp.android.msp.msp;
+package com.example.testmaven;
 
 /**
  * @author hesf001
