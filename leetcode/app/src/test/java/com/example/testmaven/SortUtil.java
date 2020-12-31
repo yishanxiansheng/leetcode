@@ -1,5 +1,7 @@
 package com.example.testmaven;
 
+import android.support.v4.app.INotificationSideChannel;
+
 import java.util.Arrays;
 
 /**
@@ -19,8 +21,17 @@ public class SortUtil {
         System.out.println(Arrays.toString(array2));
 
         int[] array3 = new int[]{72, 6, 57, 88, 60, 42, 83, 73, 48, 85};
-        quickSort2(array3);
+        quickSort(array3);
         System.out.println(Arrays.toString(array3));
+
+        int[] array4 = new int[]{72, 6, 57, 88, 60, 42, 83, 73, 48, 85};
+        countNumSort1(array4);
+        System.out.println(Arrays.toString(array4));
+
+        int[] array5 = new int[]{72, 6, 57, 88, 60, 42, 83, 73, 48, 85};
+        System.out.println(findMaxDiff(array5));
+
+
     }
 
 
@@ -114,7 +125,7 @@ public class SortUtil {
 
         int temp = array[start];
         int mark = start;
-        for (int i = start+1; i <= end; i++) {
+        for (int i = start + 1; i <= end; i++) {
             if (array[i] < temp) {
                 mark++;
                 int a = array[mark];
@@ -198,6 +209,84 @@ public class SortUtil {
         getLeastNumbersHelper(arr, left, i - 1);
         getLeastNumbersHelper(arr, i - 1, right);
     }
+
+    /**
+     * 计数排序1 最简单的
+     *
+     * @param array
+     */
+    public static int[] countNumSort1(int[] array) {
+        //找出最大值跟最小值
+        int max = array[0];
+        int min = max;
+        for (int i = 0; i < array.length; i++) {
+            max = max > array[i] ? max : array[i];
+            min = min > array[i] ? array[i] : min;
+        }
+
+        int[] tempArray = new int[max - min + 1];
+
+        //数组index等于num - min的值，index数组的值就+1
+        for (int i = 0; i < array.length; i++) {
+            tempArray[array[i] - min]++;
+        }
+
+        int index = 0;
+        for (int i = 0; i < tempArray.length; i++) {
+            for (int j = 0; j < tempArray[i]; j++) {
+                array[index++] = i + min;
+            }
+        }
+        return array;
+    }
+
+    /**
+     * 计算数组最大的相邻差 最简单的
+     *
+     * @param array 无序数组
+     */
+    public static int findMaxDiff(int[] array) {
+        //找出最大值跟最小值
+        int max = array[0];
+        int min = max;
+        for (int i = 0; i < array.length; i++) {
+            max = max > array[i] ? max : array[i];
+            min = min > array[i] ? array[i] : min;
+        }
+
+        int[] tempArray = new int[max - min + 1];
+
+        //数组index等于num - min的值，index数组的值就+1
+        for (int i = 0; i < array.length; i++) {
+            tempArray[array[i] - min]++;
+        }
+
+        int result = 0;
+        int max2 = 0;
+        for (int i = 0; i < tempArray.length; i++) {
+            if (tempArray[i] == 0) {
+                result++;
+                continue;
+            }
+            max2 = max2 > result ? max2 : result;
+            result = 0;
+        }
+        return max2;
+    }
+
+    /**
+     * 两个栈实现队列
+     * 栈a,栈b
+     * 入栈 入a
+     * 出栈 b不为空，b pop；b为空，a的所有元素出栈移到b，b pop
+     */
+
+
+    /**
+     * 两个4队列实现栈
+     * 队列a,队列b
+     *
+     */
 
 
 }

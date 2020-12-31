@@ -1,15 +1,20 @@
 package com.example.testmaven;
 
+import androidx.annotation.IntRange;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author hesf001
  * @description:
  * @date :2020/10/13 11:21
  */
-public class Array {
+public class TestArray {
 
     public static void main(String[] args) {
         int[] array = new int[]{999999998, 999999997, 999999999};
@@ -29,6 +34,18 @@ public class Array {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
+        try {
+            System.out.println(getCommonDivide2(4, 6) + "");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        System.out.println(removeDigits("1593212", 3));
+        System.out.println(Arrays.toString(addBigNumber("426709752318", "95481253129")));
+
     }
 
     /**
@@ -230,33 +247,214 @@ public class Array {
 
     /**
      * x的n次方
+     *
      * @param x
      * @param n
      * @return
      */
     public double myPow(double x, int n) {
-        if (n > 0){
-            if (n == 1){
+        if (n > 0) {
+            if (n == 1) {
                 return x;
             }
-            return x*myPow(x,n-1);
-        }else if (n<0){
-            if (n == -1){
-                return 1/x;
+            return x * myPow(x, n - 1);
+        } else if (n < 0) {
+            if (n == -1) {
+                return 1 / x;
             }
-            return 1/x*myPow(x,n+1);
-        }else {
+            return 1 / x * myPow(x, n + 1);
+        } else {
             return 0;
         }
     }
 
     /**
      * n个骰子
+     *
      * @param n
      * @return
      */
     public double[] twoSum(int n) {
-        double[] result = new double[5*n+1];
+        double[] result = new double[5 * n + 1];
         return null;
+    }
+
+
+    /**
+     * 最大公约数  欧你几得算法
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public static Integer getCommonDivide(int a, int b) throws Exception {
+        if (a <= 0 || b <= 0) {
+            throw new Exception("inputs cannot be zero");
+        }
+
+        //求余
+        int max = a > b ? a : b;
+        int min = a > b ? b : a;
+        int temp = max % min;
+        if (temp == 0) {
+            return min;
+        }
+        return getCommonDivide(temp, min);
+    }
+
+    /**
+     * 最大公约数  相减法
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public static Integer getCommonDivide2(int a, int b) throws Exception {
+        if (a <= 0 || b <= 0) {
+            throw new Exception("inputs cannot be zero");
+        }
+
+        //求余
+        int max = a > b ? a : b;
+        int min = a > b ? b : a;
+        int temp = max - min;
+        if (temp == 0) {
+            return min;
+        }
+        return getCommonDivide(temp, min);
+    }
+
+    /**
+     * 最大公约数 移位法
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public static Integer getCommonDivide3(int a, int b) throws Exception {
+        if (a <= 0 || b <= 0) {
+            throw new Exception("inputs cannot be zero");
+        }
+        if (a == b) {
+            return a;
+        }
+
+
+        if ((a & 1) == 0 && (b & 1) == 0) {
+            //都是偶数
+            return getCommonDivide3(a >> 1, b >> 1) << 2;
+        } else if ((a & 1) == 0 && (b & 1) != 0) {
+            return getCommonDivide3(a >> 1, b);
+        } else if ((a & 1) != 0 && (b & 1) == 0) {
+            return getCommonDivide3(a, b >> 1);
+        } else {
+            int max = a > b ? a : b;
+            int min = a > b ? b : a;
+            return getCommonDivide3(max - min, min);
+        }
+    }
+
+    /**
+     * 2的整数幂
+     *
+     * @param number
+     * @return
+     */
+    public static boolean isPowerOf2(int number) {
+        return (number & number - 1) == 0;
+    }
+
+    /**
+     * 获得全排列的下一个数
+     *
+     * @param number
+     * @return
+     */
+    public static int[] findNearestNumber(int[] number) {
+        /**
+         * 1、从个位开始，找出数列的逆序部分的前一位
+         * 2、找出逆序中最小的数字a
+         * 3、将a与逆序部分的前面一个数交换
+         * 4、将剩下的部分重新从小到大排序
+         */
+
+        //1
+        int start = 0;
+        for (int i = number.length - 1; i > 0; i--) {
+            if (number[i] > number[i - 1]) {
+                start = i;
+                break;
+            }
+        }
+        //数组都是正序，没有结果
+        if (start == 0) {
+            return null;
+        }
+
+
+        int[] result = Arrays.copyOf(number, number.length);
+        //
+
+        return null;
+    }
+
+    /**
+     * 获得全排列的下一个数
+     *
+     * @param number
+     * @return
+     */
+    public static String removeDigits(String number, int k) {
+        String result = number;
+        boolean hasCut = false;
+        for (int i = 0; i < k; i++) {
+            for (int j = 0; j < result.length() - 1; j++) {
+                if (j + 1 < result.length() && result.charAt(j) > result.charAt(j + 1)) {
+                    result = result.substring(0, j) + result.substring(j + 1);
+                    hasCut = true;
+                    break;
+                }
+            }
+        }
+        if (!hasCut) {
+            return result.substring(0, result.length() - 1);
+        }
+        System.out.println(result);
+
+        while (result.charAt(0) == '0') {
+            result = result.substring(1);
+        }
+        if (result.length() == 0) {
+            return "0";
+        }
+        return result;
+    }
+
+    public static int[] addBigNumber(String a, String b) {
+        int length = a.length() > b.length() ? a.length() : b.length();
+        int[] resultArray = new int[length + 1];
+        int[] aArray = new int[length + 1];
+        int[] bArray = new int[length + 1];
+        for (int i = 0; i < a.length(); i++) {
+            aArray[i] = a.charAt(a.length() - i - 1) - '0';
+        }
+
+        for (int i = 0; i < b.length(); i++) {
+            bArray[i] = b.charAt(b.length() - i - 1) - '0';
+        }
+
+        int data = 0;
+        for (int i = 0; i < length + 1; i++) {
+            int temp = aArray[i] + bArray[i] + data;
+
+            if (temp > 10) {
+                data = 1;
+                resultArray[i] = temp - 10;
+                continue;
+            }
+            data = 0;
+            resultArray[i] = temp;
+        }
+        return resultArray;
     }
 }

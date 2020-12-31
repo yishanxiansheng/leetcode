@@ -768,4 +768,31 @@ public class TestTreeNode {
     public TreeNode deserialize(String data) {
         return null;
     }
+
+
+    /**
+     * 中序遍历  非递归
+     *
+     * @param root
+     * @return
+     */
+    public List<Integer> inorderTraversal2(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        while (root != null || !stack.isEmpty()) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+
+
+            root = stack.pop();
+            list.add(root.val);
+            root = root.right;
+
+            //1、root 不为空的时候，将root的左结点依次入栈，最后出栈顶结点，进行打印
+            //2、root为空代表栈顶结点的右结点为空，说明
+        }
+        return list;
+    }
 }
