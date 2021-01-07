@@ -49,5 +49,17 @@ public class TestStack {
             }
             return assistStack.peek();
         }
+
+        public int top() throws Exception{
+            if (mainStack.isEmpty()) {
+                throw new Exception("stack is empty");
+            }
+
+            int result = mainStack.pop();
+            if (!assistStack.isEmpty() && result == assistStack.peek()) {
+                assistStack.pop();
+            }
+            return result;
+        }
     }
 }

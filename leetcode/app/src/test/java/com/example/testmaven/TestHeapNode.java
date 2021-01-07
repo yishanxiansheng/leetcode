@@ -6,21 +6,23 @@ import java.util.Arrays;
 public class TestHeapNode {
 
     public static void main(String[] args) {
-        int[] array = new int[]{0, 1, 3, 2, 6, 5, 7, 8, 9, 10};
+        int[] array = new int[]{0, 1, 3, 2, 6, 5, 5, 8, 9, 10};
         up(array);
         System.out.println(Arrays.toString(array));
 
-        int[] array2 = new int[]{0, 1, 3, 2, 6, 5, 7, 8, 9, 10};
+        int[] array2 = new int[]{0, 1, 3, 2, 6, 5, 5, 8, 9, 10};
         downMiner(array2, 0, array2.length);
         System.out.println(Arrays.toString(array2));
 
-        int[] array3 = new int[]{0, 1, 3, 2, 6, 5, 7, 8, 9, 10};
+        int[] array3 = new int[]{0, 1, 3, 2, 6, 5, 5, 8, 9, 10};
         build(array3);
         System.out.println(Arrays.toString(array3));
 
-        int[] array4 = new int[]{0, 1, 3, 2, 6, 5, 7, 8, 9, 10};
+        int[] array4 = new int[]{0, 1, 3, 2, 6, 5, 5, 8, 9, 10};
         heapSort(array4);
         System.out.println(Arrays.toString(array4));
+
+        System.out.println(findKthLargest(new int[]{3, 2, 3, 1, 2, 4, 5, 5, 6}, 4));
     }
 
     /**
@@ -128,5 +130,27 @@ public class TestHeapNode {
             array[0] = temp;
             downMiner(array, 0, i);
         }
+    }
+
+
+    /**
+     * 数组中的第K个最大元素
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public static int findKthLargest(int[] nums, int k) {
+        build(nums);
+        for (int i = 0; i < k; i++) {
+            if (i == k - 1) {
+                return nums[0];
+            }
+            int temp = nums[nums.length - 1];
+            nums[nums.length - 1] = nums[0];
+            nums[0] = temp;
+            downMiner(nums, 0, nums.length - 1 - i);
+        }
+        return 0;
     }
 }

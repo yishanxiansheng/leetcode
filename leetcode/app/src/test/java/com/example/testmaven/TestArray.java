@@ -457,4 +457,44 @@ public class TestArray {
         }
         return resultArray;
     }
+
+    /**
+     * 寻找出现次数大于2/n的数
+     * 摩尔投票法
+     *
+     * @param nums
+     * @return
+     */
+    public int majorityElement(int[] nums) {
+        int data = nums[0];
+        int count = 1;
+
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == data) {
+                count++;
+            } else {
+                count--;
+                if (count == 0) {
+                    data = nums[i];
+                    count++;
+                }
+            }
+        }
+        return data;
+    }
+
+    /**
+     * 找出只出现一次的数字，其余都是两次
+     *
+     * @param nums
+     * @return
+     */
+    public int singleNumber(int[] nums) {
+        int result = 0;
+        for (int i = 0; i < nums.length; i++) {
+            result = result ^ nums[i];
+        }
+
+        return result;
+    }
 }

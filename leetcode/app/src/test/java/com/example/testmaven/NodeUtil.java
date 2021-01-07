@@ -43,6 +43,9 @@ public class NodeUtil {
         ListNode(int x) {
             val = x;
         }
+
+        public ListNode() {
+        }
     }
 
 

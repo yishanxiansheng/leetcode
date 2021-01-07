@@ -795,4 +795,67 @@ public class TestTreeNode {
         }
         return list;
     }
+
+    /**
+     * 二叉树的最大深度
+     *
+     * @param root
+     * @return
+     */
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+    }
+
+    /**
+     * 二叉搜索树的第K小的值
+     *
+     * @param root
+     * @param k
+     * @return
+     */
+    int results = 0;
+    int index = 0;
+
+    public int kthSmallest(TreeNode root, int k) {
+        //二叉搜索树的中序遍历为升序
+        kthSmallestHelper(root, k);
+        return results;
+
+    }
+
+    private void kthSmallestHelper(TreeNode root, int k) {
+        if (root == null) {
+            return;
+        }
+        kthSmallestHelper(root.left, k);
+        index++;
+        if (index == k) {
+            results = root.val;
+        }
+        kthSmallestHelper(root.right, k);
+    }
+
+    /**
+     * 寻找最近公共祖先结点
+     *
+     * @param root
+     * @param p
+     * @param q
+     * @return
+     */
+    public TreeNode lowestCommonAncestor3(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || root == p || root == q){
+            return root;
+        }
+
+        TreeNode left = lowestCommonAncestor3(root.left,p,q);
+        TreeNode right = lowestCommonAncestor3(root.right, p, q);
+        if (left == null) return right;
+        if (right == null) return left;
+
+        return root;
+    }
 }

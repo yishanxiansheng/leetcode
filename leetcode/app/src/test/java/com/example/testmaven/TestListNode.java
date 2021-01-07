@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
+
 import com.example.testmaven.NodeUtil.ListNode;
 
 public class TestListNode {
@@ -24,6 +25,9 @@ public class TestListNode {
         queue.push(2);
         queue.pop();
         queue.top();
+
+        PrintUtil.print(10 / 10);
+        PrintUtil.print(10 % 10);
 
     }
 
@@ -448,7 +452,7 @@ public class TestListNode {
             return null;
         }
         //将拷贝节点放到原节点后面，例如1->2->3这样的链表就变成了这样1->1'->2->2'->3->3'
-        while (node != null ) {
+        while (node != null) {
             Node node1 = new Node(node.val);
             Node next = node.next;
             node.next = node1;
@@ -459,7 +463,7 @@ public class TestListNode {
         //把拷贝节点的random指针安排上
         node = head;
         while (node != null && node.next != null) {
-            if(node.random != null){
+            if (node.random != null) {
                 node.next.random = node.random.next;
                 node = node.next.next;
             }
@@ -473,5 +477,34 @@ public class TestListNode {
             node = temp;
         }
         return result;
+    }
+
+    /**
+     * 两数相加
+     *
+     * @param l1
+     * @param l2
+     * @return
+     */
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode start = new ListNode();
+        ListNode end = start;
+        int data = 0;
+        while (l1 != null || l2 != null || data != 0) {
+            if (l1 != null) {
+                data += l1.val;
+                l1 = l1.next;
+            }
+            if (l2 != null) {
+                data += l2.val;
+                l2 = l2.next;
+            }
+            ListNode temp = new ListNode();
+            temp.val = data % 10;
+            data = data / 10;
+            end.next = temp;
+            end = end.next;
+        }
+        return start.next;
     }
 }
