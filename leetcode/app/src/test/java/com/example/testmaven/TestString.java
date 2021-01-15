@@ -1,5 +1,13 @@
 package com.example.testmaven;
 
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 /**
  * 字符串操作
  *
@@ -19,6 +27,7 @@ public class TestString {
 
         System.out.println(longestPalindrome("babad") + "M");
 
+        System.out.println(isPalindrome("A man, a plan, a canal: Panama"));
     }
 
     /**
@@ -182,28 +191,61 @@ public class TestString {
      * @return
      */
     public static String multiply(String num1, String num2) {
-        int n1 = num1.length()-1;
-        int n2 = num2.length()-1;
-        if(n1 < 0 || n2 < 0) return "";
-        int[] mul = new int[n1+n2+2];
+        int n1 = num1.length() - 1;
+        int n2 = num2.length() - 1;
+        if (n1 < 0 || n2 < 0) return "";
+        int[] mul = new int[n1 + n2 + 2];
 
-        for(int i = n1; i >= 0; --i) {
-            for(int j = n2; j >= 0; --j) {
-                int bitmul = (num1.charAt(i)-'0') * (num2.charAt(j)-'0');
-                bitmul += mul[i+j+1]; // 先加低位判断是否有新的进位
+        for (int i = n1; i >= 0; --i) {
+            for (int j = n2; j >= 0; --j) {
+                int bitmul = (num1.charAt(i) - '0') * (num2.charAt(j) - '0');
+                bitmul += mul[i + j + 1]; // 先加低位判断是否有新的进位
 
-                mul[i+j] += bitmul / 10;
-                mul[i+j+1] = bitmul % 10;
+                mul[i + j] += bitmul / 10;
+                mul[i + j + 1] = bitmul % 10;
             }
         }
 
         StringBuilder sb = new StringBuilder();
         int i = 0;
         // 去掉前导0
-        while(i < mul.length-1 && mul[i] == 0)
+        while (i < mul.length - 1 && mul[i] == 0)
             i++;
-        for(; i < mul.length; ++i)
+        for (; i < mul.length; ++i)
             sb.append(mul[i]);
         return sb.toString();
+    }
+
+    /**
+     * 判断是否是回文串
+     *
+     * @param s
+     * @return
+     */
+    public static boolean isPalindrome(String s) {
+        if (s == null || s.length() == 0) {
+            return true;
+        }
+        String s1 = s.toLowerCase().replace(" ", "");
+        char[] chars = s1.toCharArray();
+        int start = 0;
+        int end = chars.length - 1;
+        while (start < end) {
+            if ((chars[start] >= '0' && chars[start] <= '9') || (chars[start] >= 'a' && chars[start] <= 'z')) {
+                if ((chars[end] >= '0' && chars[end] <= '9') || (chars[end] >= 'a' && chars[end] <= 'z')) {
+                    if (chars[start] != chars[end]) {
+                        return false;
+                    }
+                    start++;
+                    end--;
+                } else {
+                    end--;
+                }
+            } else {
+                start++;
+            }
+        }
+        return true;
+
     }
 }

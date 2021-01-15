@@ -262,33 +262,4 @@ public class DynamicPlan {
         return result;
 
     }
-
-    /**
-     * 二叉搜索树最近的父节点
-     *
-     * @param root
-     * @param p
-     * @param q
-     * @return
-     */
-
-    public TreeNode result;
-
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        getNearestParentNode(root, p, q);
-        return result;
-    }
-
-    private void getNearestParentNode(TreeNode root, TreeNode p, TreeNode q) {
-        if (root == null) {
-            return;
-        }
-        if ((root.val - p.val) * (root.val - q.val) <= 0) {
-            result = root;
-        } else if (root.val < p.val) {
-            getNearestParentNode(root.right, p, q);
-        } else {
-            getNearestParentNode(root.left, p, q);
-        }
-    }
 }

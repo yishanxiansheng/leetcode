@@ -37,7 +37,7 @@ public class SortUtil {
 
     /**
      * 从小到大
-     *
+     * 第一轮冒泡需要将最小的数据放在最上面
      * @param array
      */
     public static void bubbleSort2(int[] array) {

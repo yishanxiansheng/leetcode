@@ -32,6 +32,7 @@ public class TestThread {
         interThread.start();
         Thread.sleep(100);
         interThread.interrupt();
+        Thread.yield();
     }
 
     static class ReadThread1 implements Runnable {

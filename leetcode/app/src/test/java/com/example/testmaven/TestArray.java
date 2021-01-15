@@ -1,5 +1,7 @@
 package com.example.testmaven;
 
+import android.util.ArraySet;
+
 import androidx.annotation.IntRange;
 
 import java.io.UnsupportedEncodingException;
@@ -7,7 +9,11 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author hesf001
@@ -45,6 +51,9 @@ public class TestArray {
 
         System.out.println(removeDigits("1593212", 3));
         System.out.println(Arrays.toString(addBigNumber("426709752318", "95481253129")));
+
+
+        System.out.println(Arrays.toString(merge(new int[]{4, 5, 6, 0, 0, 0}, 3, new int[]{1, 2, 3}, 3)));
 
     }
 
@@ -495,6 +504,63 @@ public class TestArray {
             result = result ^ nums[i];
         }
 
+        return result;
+    }
+
+    /**
+     * 合并排序的数组
+     * 后向遍历，最大的放在A的最后
+     *
+     * @param A
+     * @param m 数组a的有效长度
+     * @param B
+     * @param n 数组b的长度
+     */
+    public static int[] merge(int[] A, int m, int[] B, int n) {
+        int index = m + n - 1;
+
+        int indexA = m - 1;
+        int indexB = n - 1;
+        int temp;
+        while (indexA >= 0 || indexB >= 0) {
+            if (indexA == -1) {
+                temp = B[indexB--];
+            } else if (indexB == -1) {
+                temp = A[indexA--];
+            } else if (A[indexA] > B[indexB]) {
+                temp = A[indexA--];
+            } else {
+                temp = B[indexB--];
+            }
+            A[index--] = temp;
+        }
+        return A;
+    }
+
+    /**
+     * 寻找数组的交集
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public int[] intersection(int[] nums1, int[] nums2) {
+        HashMap<Integer,Integer> hashMap1 = new HashMap<>();
+        Set<Integer> set = new HashSet<>();
+
+        for (int i = 0; i < nums1.length; i++) {
+            hashMap1.put(nums1[i],nums1[i]);
+        }
+        for (int i = 0; i < nums2.length; i++) {
+            if (hashMap1.containsKey(nums2[i])){
+                set.add(nums2[i]);
+            }
+        }
+        int[] result = new int[set.size()];
+        int index = 0;
+        Iterator<Integer> iterator = set.iterator();
+        while (iterator.hasNext()){
+            result[index++]=iterator.next();
+        }
         return result;
     }
 }

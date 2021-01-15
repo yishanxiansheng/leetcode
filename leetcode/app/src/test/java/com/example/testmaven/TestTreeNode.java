@@ -25,6 +25,10 @@ public class TestTreeNode {
         preOrderTraveralWithStack(node2);
     }
 
+    /**
+     * 前序遍历
+     * @param treeNode
+     */
     public static void preOrderTraveralWithStack(TreeNode treeNode) {
         if (treeNode == null) {
             return;
@@ -356,7 +360,7 @@ public class TestTreeNode {
      *
      * @param nums
      * @param target
-     * @return
+     * @return target数字出现的个数
      */
     public int search(int[] nums, int target) {
         int left = 0;
@@ -594,8 +598,8 @@ public class TestTreeNode {
     }
 
     /**
-     * 广度优先搜索 利用栈实现
-     *
+     * 广度优先搜索 利用队列实现
+     * 其实就是层序遍历
      * @param root
      * @return
      */
@@ -606,7 +610,7 @@ public class TestTreeNode {
             return list;
         }
         treeNodes.add(root);
-
+        int length = 1;
         while (!treeNodes.isEmpty()) {
             TreeNode temp = treeNodes.pollFirst();
             list.add(temp.val);
@@ -619,6 +623,9 @@ public class TestTreeNode {
         }
         return list;
     }
+
+
+
 
     /**
      * 最近公共祖先   后续遍历
@@ -685,6 +692,8 @@ public class TestTreeNode {
         kthLargestHelper(root.right);
     }
 
+
+
     /**
      * 根据前序遍历以及中序遍历构建树
      *
@@ -702,7 +711,8 @@ public class TestTreeNode {
         for (int i = 0; i < length; i++) {
             indexMap.put(inorder[i], i);
         }
-        TreeNode root = buildTree(preorder, 0, length - 1, 0, length - 1, indexMap);
+        TreeNode root = buildTree(preorder, 0,
+                length - 1, 0, length - 1, indexMap);
         return root;
     }
 
@@ -715,7 +725,8 @@ public class TestTreeNode {
      * @param indexMap
      * @return
      */
-    public TreeNode buildTree(int[] preorder, int preorderStart, int preorderEnd, int inorderStart, int inorderEnd, Map<Integer, Integer> indexMap) {
+    public TreeNode buildTree(int[] preorder, int preorderStart, int preorderEnd, int inorderStart,
+                              int inorderEnd, Map<Integer, Integer> indexMap) {
         if (preorderStart > preorderEnd) {
             return null;
         }
@@ -739,35 +750,6 @@ public class TestTreeNode {
         }
     }
 
-    /**
-     * 序列化二叉树
-     *
-     * @param root
-     * @return
-     */
-    public static StringBuffer result = new StringBuffer();
-
-    public static String serialize(TreeNode root) {
-        result.append("[");
-        serializeHelper(root);
-        result.append("]");
-        return result.toString();
-    }
-
-    public static void serializeHelper(TreeNode root) {
-        if (root == null) {
-            result.append(",null");
-            return;
-        }
-        result.append(root.val + ",");
-        serializeHelper(root.left);
-        serializeHelper(root.right);
-    }
-
-    // Decodes your encoded data to tree.
-    public TreeNode deserialize(String data) {
-        return null;
-    }
 
 
     /**
@@ -796,66 +778,34 @@ public class TestTreeNode {
         return list;
     }
 
+
     /**
-     * 二叉树的最大深度
+     * 序列化二叉树
      *
      * @param root
      * @return
      */
-    public int maxDepth(TreeNode root) {
-        if (root == null) {
-            return 0;
-        }
-        return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+    public static StringBuffer result = new StringBuffer();
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        return null;
+    }
+    public static String serialize(TreeNode root) {
+        result.append("[");
+        serializeHelper(root);
+        result.append("]");
+        return result.toString();
     }
 
-    /**
-     * 二叉搜索树的第K小的值
-     *
-     * @param root
-     * @param k
-     * @return
-     */
-    int results = 0;
-    int index = 0;
-
-    public int kthSmallest(TreeNode root, int k) {
-        //二叉搜索树的中序遍历为升序
-        kthSmallestHelper(root, k);
-        return results;
-
-    }
-
-    private void kthSmallestHelper(TreeNode root, int k) {
+    public static void serializeHelper(TreeNode root) {
         if (root == null) {
+            result.append(",null");
             return;
         }
-        kthSmallestHelper(root.left, k);
-        index++;
-        if (index == k) {
-            results = root.val;
-        }
-        kthSmallestHelper(root.right, k);
+        result.append(root.val + ",");
+        serializeHelper(root.left);
+        serializeHelper(root.right);
     }
 
-    /**
-     * 寻找最近公共祖先结点
-     *
-     * @param root
-     * @param p
-     * @param q
-     * @return
-     */
-    public TreeNode lowestCommonAncestor3(TreeNode root, TreeNode p, TreeNode q) {
-        if (root == null || root == p || root == q){
-            return root;
-        }
-
-        TreeNode left = lowestCommonAncestor3(root.left,p,q);
-        TreeNode right = lowestCommonAncestor3(root.right, p, q);
-        if (left == null) return right;
-        if (right == null) return left;
-
-        return root;
-    }
 }
