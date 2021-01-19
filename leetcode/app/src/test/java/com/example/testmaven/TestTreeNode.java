@@ -27,6 +27,7 @@ public class TestTreeNode {
 
     /**
      * 前序遍历
+     *
      * @param treeNode
      */
     public static void preOrderTraveralWithStack(TreeNode treeNode) {
@@ -415,7 +416,7 @@ public class TestTreeNode {
      * @param treeNode
      * @return
      */
-    public int getMaxDeep(TreeNode treeNode) {
+    public static int getMaxDeep(TreeNode treeNode) {
         if (treeNode == null) {
             return 0;
         }
@@ -600,6 +601,7 @@ public class TestTreeNode {
     /**
      * 广度优先搜索 利用队列实现
      * 其实就是层序遍历
+     *
      * @param root
      * @return
      */
@@ -623,8 +625,6 @@ public class TestTreeNode {
         }
         return list;
     }
-
-
 
 
     /**
@@ -693,7 +693,6 @@ public class TestTreeNode {
     }
 
 
-
     /**
      * 根据前序遍历以及中序遍历构建树
      *
@@ -751,7 +750,6 @@ public class TestTreeNode {
     }
 
 
-
     /**
      * 中序遍历  非递归
      *
@@ -791,6 +789,7 @@ public class TestTreeNode {
     public TreeNode deserialize(String data) {
         return null;
     }
+
     public static String serialize(TreeNode root) {
         result.append("[");
         serializeHelper(root);
@@ -808,4 +807,55 @@ public class TestTreeNode {
         serializeHelper(root.right);
     }
 
+
+    /**
+     * 二叉树的直径
+     * 每个结点所构成树的左子树的最大深度+右子树构成的最大深度
+     *
+     * @param root
+     * @return
+     */
+    public static int diameterOfBinaryTree(TreeNode root) {
+        int max = 0;
+        Stack<TreeNode> treeNodes = new Stack<>();
+        if (root == null) {
+            return 0;
+        }
+        treeNodes.add(root);
+        while (!treeNodes.isEmpty()) {
+            TreeNode treeNode = treeNodes.pop();
+            int temp = getMaxDeep(treeNode.left) + getMaxDeep(treeNode.right);
+            max = max > temp ? max : temp;
+            if (treeNode.left != null) {
+                treeNodes.add(treeNode.left);
+            }
+            if (treeNode.right != null) {
+                treeNodes.add(treeNode.right);
+            }
+        }
+        return max;
+
+    }
+
+    /**
+     * 二叉树转化为单链
+     *
+     * @param root
+     */
+    public void flatten(TreeNode root) {
+        while (root != null) {
+            if (root.left == null) {
+                root = root.right;
+            }else {
+                TreeNode pre = root.left;
+                while (pre.right != null){
+                    pre = pre.right;
+                }
+                pre.right = root.right;
+                root.right = root.left;
+                root.left = null;
+                root = root.right;
+            }
+        }
+    }
 }

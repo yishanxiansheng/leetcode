@@ -539,28 +539,121 @@ public class TestArray {
 
     /**
      * 寻找数组的交集
+     *
      * @param nums1
      * @param nums2
      * @return
      */
     public int[] intersection(int[] nums1, int[] nums2) {
-        HashMap<Integer,Integer> hashMap1 = new HashMap<>();
+        HashMap<Integer, Integer> hashMap1 = new HashMap<>();
         Set<Integer> set = new HashSet<>();
 
         for (int i = 0; i < nums1.length; i++) {
-            hashMap1.put(nums1[i],nums1[i]);
+            hashMap1.put(nums1[i], nums1[i]);
         }
         for (int i = 0; i < nums2.length; i++) {
-            if (hashMap1.containsKey(nums2[i])){
+            if (hashMap1.containsKey(nums2[i])) {
                 set.add(nums2[i]);
             }
         }
         int[] result = new int[set.size()];
         int index = 0;
         Iterator<Integer> iterator = set.iterator();
-        while (iterator.hasNext()){
-            result[index++]=iterator.next();
+        while (iterator.hasNext()) {
+            result[index++] = iterator.next();
         }
         return result;
+    }
+
+    /**
+     * 移动零
+     *
+     * @param nums
+     */
+    public static void moveZeroes(int[] nums) {
+        int zeroCount = 0;
+        //找到有多少个0
+        for (int i = 0; i < nums.length; i++) {
+            if (0 == nums[i]) {
+                zeroCount++;
+            }
+        }
+        //将非0 的数全部移到前面
+        int slow = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) {
+                nums[slow] = nums[i];
+                slow++;
+            }
+        }
+        //最后的全部清零
+        for (int i = nums.length - 1; i >= nums.length - zeroCount; i--) {
+            nums[i] = 0;
+        }
+    }
+
+    /**
+     * 找到所有数组中消失的数字
+     *
+     * @param nums
+     * @return
+     */
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) {
+                nums[nums[i] - 1] = nums[nums[i] - 1] > 0 ? -nums[nums[i] - 1] : nums[nums[i] - 1];
+            } else {
+                nums[Math.abs(nums[i]) - 1] = nums[Math.abs(nums[i]) - 1] > 0 ? -nums[Math.abs(nums[i]) - 1] : nums[Math.abs(nums[i]) - 1];
+            }
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) {
+                list.add(i + 1);
+
+            }
+        }
+        return list;
+    }
+
+
+    /**
+     * 最长升序子序列
+     * 动态规划
+     *
+     * @param nums
+     * @return
+     */
+    public int lengthOfLIS(int[] nums) {
+        int[] dp = new int[nums.length];
+        int max = 0;
+        for (int i = 0; i < nums.length; i++) {
+            dp[i] = 1;
+            max = Math.max(max, dp[i]);
+            for (int j = 0; j < i; j++) {
+                if (nums[j] < nums[i]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                    max = Math.max(dp[i], max);
+                }
+            }
+        }
+        return max;
+    }
+
+    /**
+     * 找出重复的整数
+     *
+     * @param nums
+     * @return
+     */
+    public int findDuplicate(int[] nums) {
+        int[] data = new int[nums.length + 1];
+        for (int i = 0; i < nums.length; i++) {
+            data[nums[i]]++;
+            if (data[nums[i]] > 1) {
+                return nums[i];
+            }
+        }
+        return 0;
     }
 }

@@ -2,6 +2,11 @@ package com.example.testmaven;
 
 /**
  * 位运算
+ * <p>
+ * 异或 ^：不一样为1
+ * 与 & :都为1结果为1
+ * 或 | :只要有一个则为1
+ * 非 ~ :0则为1，1则为0
  *
  * @author heshufan
  * @date 2020-12-26
@@ -41,6 +46,8 @@ public class BitOpreation {
         myBitmap.setBit(100);
         System.out.println(myBitmap.getBit(100));
         System.out.println(myBitmap.getBit(99));
+
+        System.out.println(hammingDistance(1, 4));
     }
 
     /**
@@ -67,7 +74,7 @@ public class BitOpreation {
 
         //设置bitIndex的值
         public void setBit(int bitIndex) {
-            if (bitIndex < 0 || bitIndex > size-1) {
+            if (bitIndex < 0 || bitIndex > size - 1) {
                 throw new IndexOutOfBoundsException("out of bounds");
             }
 
@@ -78,7 +85,7 @@ public class BitOpreation {
 
         //获取bitIndex的值
         public boolean getBit(int bitIndex) {
-            if (bitIndex < 0 || bitIndex > size-1) {
+            if (bitIndex < 0 || bitIndex > size - 1) {
                 throw new IndexOutOfBoundsException("out of bounds");
             }
 
@@ -89,5 +96,18 @@ public class BitOpreation {
 
     }
 
+    public static int hammingDistance(int x, int y) {
 
+        int a = x ^ y;
+        int result = 0;
+        int data = 1;
+
+        while (data <= a) {
+            if ((a & 1) != 0) {
+                result++;
+            }
+            a = a >> 1;
+        }
+        return result;
+    }
 }

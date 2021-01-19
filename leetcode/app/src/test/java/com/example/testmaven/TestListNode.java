@@ -2,9 +2,11 @@
 package com.example.testmaven;
 
 
+import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
@@ -329,13 +331,6 @@ public class TestListNode {
      * @param k
      * @return
      */
-    /**
-     * 链表旋转
-     *
-     * @param head
-     * @param k
-     * @return
-     */
     public ListNode rotateRight(ListNode head, int k) {
         if (head == null) {
             return null;
@@ -506,5 +501,68 @@ public class TestListNode {
             end = end.next;
         }
         return start.next;
+    }
+
+    /**
+     * 删除链表的倒数第K个结点
+     *
+     * @param head
+     * @param n
+     * @return
+     */
+    public static ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode target = head, help = head;
+        ListNode pre = head;
+        while (n > 1) {
+            if (head.next == null && n == 1) {
+                return null;
+            }
+            help = help.next;
+            n--;
+        }
+        if (help.next == null) {
+            return head.next;
+        }
+
+        while (help.next != null) {
+            pre = target;
+            target = target.next;
+            help = help.next;
+        }
+        pre.next = target.next;
+        return head;
+    }
+
+    /**
+     * 插入排序排序链表
+     * 链条没断开
+     *
+     * @param head
+     * @return
+     */
+    public ListNode sortList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode dummyNode = new ListNode(0);
+        dummyNode.next = head;
+        ListNode lastNode = head;
+        ListNode cur = head.next;
+
+        while (cur != null) {
+            if (cur.val >= lastNode.val) {
+                lastNode = cur;
+            } else {
+                ListNode start = dummyNode;
+                while (start.next != null &&start.next.val <= cur.val) {
+                    start = start.next;
+                }
+                lastNode.next = cur.next;
+                cur.next = start.next;
+                start.next = cur;
+            }
+            cur = lastNode.next;
+        }
+        return dummyNode.next;
     }
 }
