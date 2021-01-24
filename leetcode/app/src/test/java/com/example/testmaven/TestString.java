@@ -2,7 +2,10 @@ package com.example.testmaven;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -34,12 +37,13 @@ public class TestString {
 
     /**
      * 最长回文子串
+     * 转移方程
      *
      * @param s
      * @return
      */
     public static String longestPalindrome(String s) {
-        //data[i][j]指s中i到j的子串是否是回文串,是为1 0位否
+        //data[i][j]指s中i到j的子串是否是回文串,是为true 不是为false
         boolean[][] data = new boolean[s.length()][s.length()];
         int a = 0;
         int length = 0;
@@ -253,7 +257,8 @@ public class TestString {
 
     /**
      * 最长的无重复子串
-     * 滑动窗口
+     * 滑动窗口 左边界为left，右边界为i
+     * hashmapkey为字符，value为该字符出现最靠右的index
      *
      * @param s
      * @return
@@ -279,13 +284,14 @@ public class TestString {
      * 字符串的排列
      * s2中是否存在s1的全排列
      * 也是用到滑动窗口模式
+     *
      * @param s1
      * @param s2
      * @return
      */
     public boolean checkInclusion(String s1, String s2) {
 
-        if (s1.length() >s2.length()){
+        if (s1.length() > s2.length()) {
             return false;
         }
         //数组存放的是该字符出现的次数
@@ -296,7 +302,7 @@ public class TestString {
             ss1[s1.charAt(i) - 'a']++;
             ss2[s2.charAt(i) - 'a']++;
         }
-        if (matched(ss1,ss2)){
+        if (matched(ss1, ss2)) {
             return true;
         }
 
@@ -319,5 +325,29 @@ public class TestString {
             }
         }
         return true;
+    }
+
+    public int longestPalindromes(String s) {
+        int result = 0;
+        Map<Character, Integer> hashmap = new HashMap<>();
+        char[] ss = s.toCharArray();
+        for (int i = 0; i < ss.length; i++) {
+            hashmap.put(ss[i], hashmap.getOrDefault(ss[i], 0) + 1);
+        }
+
+        boolean hasOne = false;
+        int single = 0;
+        Set<Map.Entry<Character, Integer>> sets = hashmap.entrySet();
+        for (Map.Entry<Character, Integer> entry : sets) {
+            if (entry.getValue() % 2 == 0) {
+                result += entry.getValue();
+            } else {
+
+            }
+
+        }
+
+
+        return hasOne ? result + 1 : result;
     }
 }

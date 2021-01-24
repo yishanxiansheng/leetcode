@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import okhttp3.Dns;
+import okhttp3.internal.connection.RealConnectionPool;
 
 /**
  * @author heshufan
@@ -27,6 +28,7 @@ import okhttp3.Dns;
 public class HttpDns implements Dns {
 
     private DnsManager dnsManager;
+    RealConnectionPool
 
     public HttpDns() {
         IResolver[] resolvers = new IResolver[1];

@@ -9,10 +9,14 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 /**
@@ -23,38 +27,49 @@ import java.util.Set;
 public class TestArray {
 
     public static void main(String[] args) {
-        int[] array = new int[]{999999998, 999999997, 999999999};
-//        minNumber(array);
-        //将application/x-www-form-urlencoded字符串转换成普通字符串
-        //采用UTF-8字符集进行解码
-        try {
-            System.out.println(URLDecoder.decode("%E5%8C%97%E4%BA%AC%E5%A4%A7%E5%AD%A6", "UTF-8"));
-            //采用GBK字符集进行解码
-            System.out.println(URLDecoder.decode("%B1%B1%BE%A9%B4%F3%D1%A7", "GBK"));
 
-            // 将普通字符串转换成application/x-www-form-urlencoded字符串
-            //采用utf-8字符集
-            System.out.println(URLEncoder.encode("北京大学", "UTF-8"));
-            //采用GBK字符集
-            System.out.println(URLEncoder.encode("北京大学", "GBK"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            System.out.println(getCommonDivide2(4, 6) + "");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        System.out.println(Integer.valueOf('2') - '0');
+        int result = Integer.valueOf("9999999999");
 
 
-        System.out.println(removeDigits("1593212", 3));
-        System.out.println(Arrays.toString(addBigNumber("426709752318", "95481253129")));
-
-
-        System.out.println(Arrays.toString(merge(new int[]{4, 5, 6, 0, 0, 0}, 3, new int[]{1, 2, 3}, 3)));
-
+//        int[] array = new int[]{999999998, 999999997, 999999999};
+////        minNumber(array);
+//        //将application/x-www-form-urlencoded字符串转换成普通字符串
+//        //采用UTF-8字符集进行解码
+//        try {
+//            System.out.println(URLDecoder.decode("%E5%8C%97%E4%BA%AC%E5%A4%A7%E5%AD%A6", "UTF-8"));
+//            //采用GBK字符集进行解码
+//            System.out.println(URLDecoder.decode("%B1%B1%BE%A9%B4%F3%D1%A7", "GBK"));
+//
+//            // 将普通字符串转换成application/x-www-form-urlencoded字符串
+//            //采用utf-8字符集
+//            System.out.println(URLEncoder.encode("北京大学", "UTF-8"));
+//            //采用GBK字符集
+//            System.out.println(URLEncoder.encode("北京大学", "GBK"));
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//
+//        try {
+//            System.out.println(getCommonDivide2(4, 6) + "");
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//        System.out.println(removeDigits("1593212", 3));
+//        System.out.println(Arrays.toString(addBigNumber("426709752318", "95481253129")));
+//
+//
+//        System.out.println(Arrays.toString(merge(new int[]{4, 5, 6, 0, 0, 0}, 3, new int[]{1, 2, 3}, 3)));
+//
+//        int[][] a = new int[4][2];
+//        a[0] = new int[]{1, 3};
+//        a[1] = new int[]{2, 6};
+//        a[2] = new int[]{8, 10};
+//        a[3] = new int[]{15, 18};
+//        merge(a);
     }
 
     /**
@@ -655,5 +670,260 @@ public class TestArray {
             }
         }
         return 0;
+    }
+
+    /**
+     * 合并区间
+     *
+     * @param intervals
+     * @return
+     */
+    public static int[][] merge(int[][] intervals) {
+        if (intervals.length == 0) {
+            return new int[0][2];
+        }
+
+        List<int[]> result = new ArrayList<>();
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                //从小到大排序
+                return o1[0] - o2[0];
+            }
+        });
+
+        for (int i = 0; i < intervals.length; i++) {
+            //只需要与result的最后一个元素进行比较
+            if (result.size() == 0) {
+                result.add(intervals[i]);
+                continue;
+            }
+            int[] temp = result.get(result.size() - 1);
+            if (temp[1] < intervals[i][0]) {
+                result.add(intervals[i]);
+            } else if (temp[1] <= intervals[i][1]) {
+                temp[1] = intervals[i][1];
+                result.set(result.size() - 1, temp);
+            }
+        }
+        return result.toArray(new int[result.size()][]);
+    }
+
+    /**
+     * 找出最大的三个数
+     *
+     * @param nums
+     * @return
+     */
+    public int maximumProduct(int[] nums) {
+        Arrays.sort(nums);
+        int length = nums.length - 1;
+        int max = nums[length] * nums[length - 1] * nums[length - 2];
+        if (nums[0] < 0 && nums[1] < 0) {
+            max = Math.max(max, nums[0] * nums[1] * nums[length]);
+        }
+        return max;
+    }
+
+    /**
+     * 最大连续子数组
+     *
+     * @param nums
+     * @return
+     */
+    public int maxProduct(int[] nums) {
+        Arrays.sort(nums);
+        int max = 1;
+        if (nums[0] >= 0) {
+            for (int i = 0; i < nums.length; i++) {
+                if (nums[i] != 0) {
+                    max = max * nums[i];
+                }
+            }
+        } else {
+
+
+        }
+        return max;
+    }
+
+    /**
+     * 最大子序和
+     *
+     * @param nums
+     * @return
+     */
+    public int maxSubArray(int[] nums) {
+        //dp[i]表示前i位的最大值，包含nums[i],一般连续子序列的动态规划都需要包含第i项
+//        int[] dp = new int[nums.length];
+//        dp[0] = nums[0];
+//        int max = nums[0];
+//        for (int i = 1; i < nums.length; i++) {
+//            dp[i] = Math.max(dp[i - 1] + nums[i], nums[i]);
+//            max = Math.max(max, dp[i]);
+//        }
+//        return max;
+
+        //优化后的
+        int dp = nums[0];
+        int max = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            int data = dp;
+            dp = Math.max(data + nums[i], nums[i]);
+            max = Math.max(max, dp);
+        }
+        return max;
+    }
+
+    /**
+     * 乘积最大子数组
+     *
+     * @param nums
+     * @return
+     */
+    public int maxProducts(int[] nums) {
+        int length = nums.length;
+        int maxF = nums[0];
+        int minF = nums[0];
+        int result = nums[0];
+        for (int i = 1; i < length; ++i) {
+            int max = maxF;
+            int min = minF;
+            maxF = Math.max(max * nums[i], Math.max(nums[i], min * nums[i]));
+            minF = Math.min(min * nums[i], Math.min(nums[i], max * nums[i]));
+            result = Math.max(result, maxF);
+        }
+
+        return result;
+
+        //优化前
+
+//        int length = nums.length;
+//        int[] maxF = new int[length];
+//        int[] minF = new int[length];
+//        maxF[0] = nums[0];
+//        minF[0] = nums[0];
+//        int result = nums[0];
+//        for (int i = 1; i < length; ++i) {
+//            maxF[i] = Math.max(maxF[i - 1] * nums[i], Math.max(nums[i], minF[i - 1] * nums[i]));
+//            minF[i] = Math.min(minF[i - 1] * nums[i], Math.min(nums[i], maxF[i - 1] * nums[i]));
+//            result = Math.max(result,maxF[i]);
+//        }
+//
+//        return result;
+    }
+
+    /**
+     * 连续子序列为k
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int subarraySum(int[] nums, int k) {
+        //暴力解法
+//        int count = 0;
+//        for (int i = 0; i < nums.length; i++) {
+//            int sum = 0;
+//            for (int j = i; j < nums.length; j++) {
+//                sum += nums[j];
+//                if (sum == k) {
+//                    count++;
+//                    break;
+//                }
+//            }
+//        }
+//        return count;
+
+        //优化解法  利用的是前缀和
+        //pre[i]代表前i项的数据和，pre[i]-pre[j-1]==k代表从j到i的的数组的和为k
+        //所以当我们知道pre[i]的时候，只需要知道有多个个pre[j]满足pre[i]-pre[j-1]==k就可以了
+
+        Map<Integer, Integer> hashMap = new HashMap<>();
+        int count = 0;
+        int pre = 0;
+        hashMap.put(0, 1);
+        for (int i = 0; i < nums.length; i++) {
+            pre += nums[i];
+            if (hashMap.containsKey(pre - k)) {
+                //可能不止包含一个
+                count += hashMap.get(pre - k);
+            }
+            hashMap.put(pre, hashMap.getOrDefault(pre, 0) + 1);
+        }
+        return count;
+    }
+
+
+    /**
+     * 滑动窗口的最大值
+     * 滑动窗口只需要两个指针就ok了，不需要真的弄个数组
+     * 利用优先队列存储的是当前滑动窗口的值，不过是已经排好序了，每次排序的时间复杂度为logn，所以最终的
+     * 时间复杂度为nlogn
+     * PriorityQueue
+     *
+     * @param nums
+     * @param k    1<=k<=nums.length
+     * @return
+     */
+    public int[] maxSlidingWindow(int[] nums, int k) {
+
+        int n = nums.length;
+        PriorityQueue<int[]> pq = new PriorityQueue<int[]>(new Comparator<int[]>() {
+            public int compare(int[] pair1, int[] pair2) {
+                return pair1[0] != pair2[0] ? pair2[0] - pair1[0] : pair2[1] - pair1[1];
+            }
+        });
+        for (int i = 0; i < k; ++i) {
+            pq.offer(new int[]{nums[i], i});
+        }
+        int[] ans = new int[n - k + 1];
+        ans[0] = pq.peek()[0];
+        for (int i = k; i < n; ++i) {
+            pq.offer(new int[]{nums[i], i});
+            while (pq.peek()[1] <= i - k) {
+                pq.poll();
+            }
+            ans[i - k + 1] = pq.peek()[0];
+        }
+        return ans;
+    }
+
+
+    public static List<Integer> addToArrayForm(int[] A, int K) {
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < A.length; i++) {
+            buffer.append(A[i]);
+        }
+        int result = Integer.valueOf(buffer.toString());
+        int a = result + K;
+        char[] chars = String.valueOf(a).toCharArray();
+        List<Integer> lists = new LinkedList<>();
+        for (int i = 0; i < chars.length; i++) {
+            lists.add(Integer.valueOf(chars[i]));
+        }
+        return lists;
+    }
+
+    /**
+     * 最长连续递增子序列
+     *
+     * @param nums
+     * @return
+     */
+    public int findLengthOfLCIS(int[] nums) {
+        int left = 0;
+        if (nums.length ==1 || nums.length == 0){
+            return nums.length;
+        }
+        int max = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] <= nums[i-1]) {
+                left = i;
+            }
+            max = Math.max(i - left + 1, max);
+
+        }
+        return max;
     }
 }

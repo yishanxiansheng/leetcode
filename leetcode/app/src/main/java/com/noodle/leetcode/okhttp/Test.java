@@ -47,7 +47,7 @@ public class Test {
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .build();
 
-//        postString(client);
+//        postForm(client);
 //        postStream(client);
 //        postFile(client);
 //        postForm(client);
