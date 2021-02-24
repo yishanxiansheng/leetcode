@@ -1,11 +1,24 @@
 package com.example.testmaven;
 
+import com.example.testmaven.designmode.Main;
+
 import java.io.IOException;
+<<<<<<< HEAD
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+=======
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+>>>>>>> callback
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -33,6 +46,128 @@ public class TestString {
         System.out.println(longestPalindrome("babad") + "M");
 
         System.out.println(isPalindrome("A man, a plan, a canal: Panama"));
+
+
+        //字符参与运行的运算的时候是ascii码值
+        System.out.println(1 + 'c');
+        //数字作为ascii码值转为字符
+        System.out.println((char) 99);
+
+        isAnagram("nl", "cx");
+
+        String str = "haha";
+        new Thread() {
+            @Override
+            public void run() {
+                System.out.println(str);
+            }
+        }.start();
+        equalSubstring("krrgw", "zjxss", 19);
+        removeOuterParentheses("(()())(())");
+        minWindow("bbaa", "aba");
+    }
+
+    /**
+     * 最小覆盖子串
+     * 双指针法
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public static String minWindow(String s, String t) {
+        if (s.equals(t)) {
+            return t;
+        }
+        int res_left = 0, red_right = 0;
+        int left = 0;
+        int right = t.length() - 1;
+        int min = Integer.MAX_VALUE;
+        while (left < right) {
+            if (contains(s.substring(left, right + 1), t)) {
+                if (right - left + 1 < min) {
+                    min = right - left + 1;
+                    res_left = left;
+                    red_right = right;
+                }
+                left++;
+            } else {
+                right++;
+            }
+
+        }
+        return red_right == res_left ? s.substring(res_left, red_right + 1) : "";
+    }
+
+    public static boolean contains(String s, String t) {
+        for (int i = 0; i < t.length(); i++) {
+            if (!s.contains(t.charAt(i) + "")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 删除最外层的括号
+     *
+     * @param S
+     * @return
+     */
+    public static String removeOuterParentheses(String S) {
+        StringBuffer res = new StringBuffer();
+        Deque<Character> deque = new ArrayDeque<>();
+        int left = 0;
+        for (int i = 0; i < S.length(); i++) {
+            if ('(' == S.charAt(i)) {
+                deque.push(S.charAt(i));
+            } else {
+                if ('(' == deque.peek()) {
+                    deque.pop();
+                    if (deque.size() == 0) {
+                        String ss = S.substring(left, i + 1);
+                        if (ss.length() > 2) {
+                            res.append(ss.substring(1, ss.length() - 1));
+                        }
+                        left = i + 1;
+                    }
+                }
+            }
+        }
+        return res.toString();
+    }
+
+    /**
+     * 尽可能使字符串相等
+     * 转化为滑动窗口的最大值
+     *
+     * @param s
+     * @param t
+     * @param maxCost
+     * @return
+     */
+    public static int equalSubstring(String s, String t, int maxCost) {
+        //最为关键的一点
+        int[] diff = new int[s.length()];
+        for (int i = 0; i < s.length(); i++) {
+            diff[i] = Math.abs(s.charAt(i) - t.charAt(i));
+        }
+
+        int left = 0;
+        int right = 0;
+        int max = 0;
+        int sum = 0;
+        while (left <= right && right < s.length()) {
+            sum += diff[right];
+            if (sum <= maxCost) {
+                max = Math.max(right - left + 1, max);
+            } else {
+                sum -= diff[left];
+                left++;
+            }
+            right++;
+        }
+        return max;
     }
 
     /**
@@ -252,7 +387,208 @@ public class TestString {
             }
         }
         return true;
+    }
 
+    /**
+     * 找不同
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public char findTheDifference(String s, String t) {
+        int res = 0;
+        for (int i = 0; i < s.toCharArray().length; i++) {
+            res = res ^ s.charAt(i);
+        }
+
+        for (int i = 0; i < t.toCharArray().length; i++) {
+            res = res ^ t.charAt(i);
+        }
+        return (char) res;
+    }
+
+    /**
+     * 字母异味词
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public static boolean isAnagram(String s, String t) {
+        int[] acountS = new int[26];
+        int[] acountT = new int[26];
+
+        int lengthS = s.toCharArray().length;
+        int lengthT = t.toCharArray().length;
+        if (lengthS != lengthT) {
+            return false;
+        }
+        for (int i = 0; i < s.toCharArray().length; i++) {
+            acountS[s.charAt(i) - 'a']++;
+            acountT[t.charAt(i) - 'a']++;
+        }
+
+        for (int i = 0; i < 26; i++) {
+            if (acountS[i] != acountT[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 反转字符串中的单词 III
+     *
+     * @param s
+     * @return
+     */
+    public String reverseWords(String s) {
+        String[] data = s.split(" ");
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < data.length; i++) {
+            result.append(reverseWords2(data[i]));
+        }
+        return result.toString();
+    }
+
+    public String reverseWords2(String s) {
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < s.length(); i++) {
+            result.append(s.charAt(s.length() - 1 - i));
+        }
+        return result.toString();
+    }
+
+    /**
+     * 替换后的最长重复字符
+     *
+     * @param s
+     * @param k
+     * @return
+     */
+    public int characterReplacement(String s, int k) {
+        int left = 0;
+        int[] acount = new int[26];
+        int max = 0;
+        //right作为滑动窗口的右边界
+        for (int right = 0; right < s.length(); right++) {
+            int index = s.charAt(right) - 'A';
+            acount[index]++;
+            max = Math.max(acount[index], max);
+            if (right - left + 1 - max > k) {
+                acount[s.charAt(left) - 'A']--;
+                left++;
+            }
+        }
+        return s.length() - left + 1;
+    }
+
+    /**
+     * Excel表列序号
+     *
+     * @param s
+     * @return
+     */
+    public int titleToNumber(String s) {
+        char[] chars = s.toCharArray();
+        int result = 0;
+        for (int i = chars.length - 1; i >= 0; i--) {
+            result += (chars[i] - 'A' + 1) * Math.pow(26, chars.length - 1 - i);
+        }
+        return result;
+    }
+
+    /**
+     * 找到字符串中所有字母异位词
+     */
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> res = new ArrayList<>();
+        if (s == null || s.length() == 0 || s.length() < p.length()) {
+            return res;
+        }
+        int[] ss1 = new int[26];
+        int[] ss2 = new int[26];
+
+        for (int i = 0; i < p.length(); i++) {
+            ss1[s.charAt(i) - 'a']++;
+            ss2[p.charAt(i) - 'a']++;
+        }
+        if (matched(ss1, ss2)) {
+            res.add(0);
+        }
+        for (int i = 0; i < s.length() - p.length(); i++) {
+            ss2[s.charAt(i + p.length()) - 'a']++;
+            ss2[s.charAt(i) - 'a']--;
+            if (matched(ss1, ss2)) {
+                res.add(i);
+            }
+        }
+        return res;
+    }
+
+    public boolean matched(int[] s1, int[] s2) {
+        for (int i = 0; i < 26; i++) {
+            if (s1[i] != s2[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * 分治法
+     * 241、为运算表达式设计优先级
+     *
+     * @param input
+     * @return
+     */
+    public static List<Integer> diffWaysToCompute(String input) {
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < input.length(); i++) {
+            char data = input.charAt(i);
+            if (data == '*' || data == '+' || data == '-') {
+                List<Integer> left = diffWaysToCompute(input.substring(0, i));
+                List<Integer> right = diffWaysToCompute(input.substring(i + 1));
+                for (int j = 0; j < left.size(); j++) {
+                    for (int k = 0; k < right.size(); k++) {
+                        if (data == '*') {
+                            res.add(left.get(j) * right.get(k));
+                        } else if (data == '+') {
+                            res.add(left.get(j) + right.get(k));
+                        } else if (data == '-') {
+                            res.add(left.get(j) - right.get(k));
+                        }
+                    }
+                }
+            }
+        }
+        if (res.isEmpty()) {
+            res.add(Integer.parseInt(input));
+        }
+        return res;
+    }
+
+    /**
+     * s是否为t的子序列
+     * 双指针
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public boolean isSubsequence(String s, String t) {
+        int indexS = 0;
+        int indexT = 0;
+
+        while (indexS < s.length() && indexT < t.length()) {
+            if (t.charAt(indexT) == s.charAt(indexS)) {
+                indexS++;
+            }
+            indexT++;
+        }
+        return indexS == s.length();
     }
 
     /**

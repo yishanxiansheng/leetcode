@@ -4,6 +4,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author heshufan
@@ -21,6 +23,22 @@ public class TestFuture {
         System.out.println("main thread stop");
 
         order();
+
+        try {
+            FutureTask<String> futureTask = new FutureTask<>(new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    Thread.sleep(2000);
+                    return "heshufan";
+                }
+            });
+            new Thread(futureTask).start();
+            String s = futureTask.get(1, TimeUnit.SECONDS);
+            System.out.println(s);
+        } catch (Exception e) {
+            System.out.println("error");
+        }
+
 
     }
 

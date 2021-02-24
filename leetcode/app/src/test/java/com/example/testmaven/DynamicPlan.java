@@ -19,6 +19,42 @@ public class DynamicPlan {
 
         int a = 2, b = 2;
         System.out.println(b ^ a ^ a);
+        int[][] ints = new int[3][3];
+        ints[0] = new int[]{1, 2, 2};
+        ints[1] = new int[]{3, 8, 2};
+        ints[2] = new int[]{5, 3, 5};
+        minimumEffortPath(ints);
+    }
+
+    /**
+     * 最小路径消耗
+     *
+     * @param heights
+     * @return
+     */
+    public static int minimumEffortPath(int[][] heights) {
+        int[][] min = new int[heights.length][heights[0].length];
+
+        for (int i = 1; i < heights[0].length; i++) {
+            min[0][i] = Math.max(Math.abs(heights[0][i] - heights[0][i - 1]), min[0][i - 1]);
+        }
+
+        for (int i = 1; i < heights.length; i++) {
+            min[i][0] = Math.max(Math.abs(heights[i][0] - heights[i - 1][0]), min[i - 1][0]);
+        }
+
+        for (int i = 1; i < heights.length; i++) {
+            for (int j = 1; j < heights[0].length; j++) {
+                int a = Math.abs(heights[i][j] - heights[i - 1][j]);
+                int b = Math.abs(heights[i][j] - heights[i][j - 1]);
+                if (a > b) {
+                    min[i][j] = Math.max(min[i][j - 1], b);
+                } else if (a <= b) {
+                    min[i][j] = Math.max(min[i - 1][j], a);
+                }
+            }
+        }
+        return min[heights.length - 1][heights[0].length - 1];
     }
 
     /**
@@ -260,6 +296,112 @@ public class DynamicPlan {
             result = result < a[i] ? a[i] : result;
         }
         return result;
+    }
 
+
+    /**
+     * 零钱兑换
+     *
+     * @param coins
+     * @param amount
+     * @return
+     */
+    public int coinChange(int[] coins, int amount) {
+        //dp[n]代表amount为n时的最小硬币数
+        int[] dp = new int[amount + 1];
+        for (int i = 0; i < amount + 1; i++) {
+            dp[i] = amount + 1;
+        }
+        dp[0] = 0;
+        for (int i = 0; i <= amount; i++) {
+            for (int j = 0; j < coins.length; j++) {
+                if (i >= coins[i]) {
+                    dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
+                }
+            }
+        }
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+
+    /**
+     * 使用最小花费爬楼梯
+     *
+     * @param cost
+     * @return
+     */
+    public int minCostClimbingStairs(int[] cost) {
+        int n = cost.length;
+        int[] dp = new int[n + 1];
+        dp[0] = dp[1] = 0;
+        for (int i = 2; i <= n; i++) {
+            dp[i] = Math.min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2]);
+        }
+        return dp[n];
+    }
+
+    /**
+     * 编辑距离
+     * 将word1转化为word2
+     *
+     * @param word1
+     * @param word2
+     * @return
+     */
+    public int minDistance(String word1, String word2) {
+        int[][] dp = new int[word1.length() + 1][word2.length() + 1];
+        for (int i = 0; i < word1.length() + 1; i++) {
+            dp[i][0] = i;
+        }
+        for (int i = 0; i < word2.length() + 1; i++) {
+            dp[0][i] = i;
+        }
+
+        for (int i = 1; i < word1.length() + 1; i++) {
+            for (int j = 1; j < word2.length() + 1; j++) {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = Math.min(Math.min(dp[i - 1][j - 1], dp[i - 1][j]), dp[i][j - 1]) + 1;
+                }
+            }
+        }
+        return dp[word1.length()][word2.length()];
+    }
+
+    /**
+     * 最长公共子序列
+     *
+     * @param text1
+     * @param text2
+     * @return
+     */
+    public int longestCommonSubsequence(String text1, String text2) {
+        int[][] dp = new int[text1.length()][text2.length()];
+        for (int i = 0; i < text1.length(); i++) {
+            if (text1.charAt(i) == text2.charAt(0)) {
+                dp[i][0] = 1;
+            } else {
+                dp[i][0] = i == 0 ? 0 : dp[i - 1][0];
+            }
+        }
+
+        for (int i = 0; i < text2.length(); i++) {
+            if (text2.charAt(i) == text1.charAt(0)) {
+                dp[0][i] = 1;
+            } else {
+                dp[0][i] = i == 0 ? 0 : dp[0][i - 1];
+            }
+        }
+
+        for (int i = 1; i < text1.length(); i++) {
+            for (int j = 1; j < text2.length(); j++) {
+                if (text1.charAt(i) == text2.charAt(j)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(Math.max(dp[i - 1][j - 1], dp[i][j - 1]), dp[i - 1][j - 1]);
+                }
+            }
+        }
+        return dp[text1.length() - 1][text2.length() - 1];
     }
 }

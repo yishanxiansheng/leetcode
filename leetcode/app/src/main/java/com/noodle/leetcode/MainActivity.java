@@ -1,8 +1,27 @@
 package com.noodle.leetcode;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
+import android.util.ArrayMap;
+import android.util.Log;
+import android.util.LruCache;
+import android.util.SparseArray;
+import android.view.View;
+import android.view.ViewStub;
+import android.view.ViewTreeObserver;
+import android.widget.Button;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.noodle.leetcode.router.Route;
+import com.noodle.leetcode.view.MyAdapter;
+import com.noodle.leetcode.view.MyRecyclerView;
 
 import com.noodle.leetcode.okhttp.HttpDns;
 import com.noodle.leetcode.okhttp.LoggingInterceptor;
@@ -10,8 +29,10 @@ import com.noodle.leetcode.okhttp.LoggingInterceptor;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import okhttp3.CacheControl;
 import okhttp3.Call;
@@ -28,74 +49,67 @@ import retorfit.Translation;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+@Route(path = "app/main")
 public class MainActivity extends AppCompatActivity {
+
+    MyRecyclerView recyclerView;
+    ViewStub viewStub;
+     Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("heshufan", "onCreate");
+        Looper.myLooper();
         setContentView(R.layout.activity_main);
-        retrofitGet();
-    }
-
-
-    private void retrofitGet() {
-
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(logging)
-                .build();
-
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .client(client)
-                .baseUrl("http://api.fanyi.baidu.com/api/trans/vip/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        GetRequest_Interface request = retrofit.create(GetRequest_Interface.class);
-
-        retrofit2.Call<Translation> call = request.getCall();
-
-        call.enqueue(new retrofit2.Callback<Translation>() {
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new MyAdapter());
+        viewStub = findViewById(R.id.view_stub);
+        button = findViewById(R.id.button);
+        View view = viewStub.inflate();
+        TextView textView = view.findViewById(R.id.textView);
+        textView.setText("ViewStub");
+        button.post(new Runnable() {
             @Override
-            public void onResponse(retrofit2.Call<Translation> call, retrofit2.Response<Translation> response) {
-                System.out.println("heshufan" + response.body().toString());
-            }
-
-            @Override
-            public void onFailure(retrofit2.Call<Translation> call, Throwable t) {
-                System.out.println("heshufan" + "连接失败");
+            public void run() {
+                System.out.println("1heshufan" + button.getHeight());
+                System.out.println("1heshufan" + button.getMeasuredHeight());
             }
         });
+        button.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                System.out.println("2heshufan" + button.getHeight());
+                System.out.println("2heshufan" + button.getMeasuredHeight());
+            }
+        });
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(intent);
+                Intent intent = new Intent();
+                ComponentName componetName = new ComponentName("com.noodle.testtaskaffinity",
+                        "com.noodle.testtaskaffinity.ThridActivity");
+                intent.setComponent(componetName);
+                startActivity(intent);
+            }
+        });
+
+        SparseArray<String> stringSparseArray = new SparseArray<>();
+        for (int i = 0; i < 13; i++) {
+            stringSparseArray.put(i, "heshufan");
+        }
+        System.out.println(stringSparseArray.get(1));
     }
 
-    private void okHttpPost() {
-        //缓存策略
-        CacheControl cacheControl = new CacheControl.Builder()
-                .noCache()
-                .maxAge(1, TimeUnit.MICROSECONDS)
-                .build();
 
-
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new LoggingInterceptor())
-                .dns(new HttpDns())
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .build();
-
-        HashMap<String, String> hashMap = new HashMap<>(6);
-        hashMap.put("appid", "2015063000000001");
-        hashMap.put("salt", "1435660288");
-        hashMap.put("sign", "f89f9594663708c1605f3d736d01d2d4");
-        hashMap.put("q", "apple");
-        hashMap.put("form", "en");
-        hashMap.put("to", "zh");
-        JSONObject object = new JSONObject(hashMap);
-        System.out.println(object.toString());
-        RequestBody requestBody = FormBody.create(MediaType.parse("application/x-www-form-urlencoded"), object.toString());
-        Request request = new Request.Builder().url("http://api.fanyi.baidu.com/api/trans/vip/translate")
-                .post(requestBody)
+    public void okhttp() {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url("https://github.com/hongyangAndroid")
                 .build();
         Call call = client.newCall(request);
         call.enqueue(new Callback() {
@@ -110,5 +124,19 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(response.body().string());
             }
         });
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        button.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                System.out.println("3heshufan" + button.getHeight());
+                System.out.println("3heshufan" + button.getMeasuredHeight());
+            }
+        });
+        super.onWindowFocusChanged(hasFocus);
+        LinkedHashMap hashMap = new LinkedHashMap();
+
     }
 }

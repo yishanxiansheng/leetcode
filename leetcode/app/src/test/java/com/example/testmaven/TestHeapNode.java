@@ -1,6 +1,8 @@
 package com.example.testmaven;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 //堆  大顶堆：每个父结点比他的子节点大，但是左右结点谁大谁小不知道
 public class TestHeapNode {
@@ -10,19 +12,21 @@ public class TestHeapNode {
         up(array);
         System.out.println(Arrays.toString(array));
 
-        int[] array2 = new int[]{0, 1, 3, 2, 6, 5, 5, 8, 9, 10};
-        downMiner(array2, 0, array2.length);
-        System.out.println(Arrays.toString(array2));
+//        int[] array2 = new int[]{0, 1, 3, 2, 6, 5, 5, 8, 9, 10};
+//        downMiner(array2, 0, array2.length);
+//        System.out.println(Arrays.toString(array2));
+//
+//        int[] array3 = new int[]{0, 1, 3, 2, 6, 5, 5, 8, 9, 10};
+//        build(array3);
+//        System.out.println(Arrays.toString(array3));
+//
+//        int[] array4 = new int[]{0, 1, 3, 2, 6, 5, 5, 8, 9, 10};
+//        heapSort(array4);
+//        System.out.println(Arrays.toString(array4));
+//
+//        System.out.println(findKthLargest(new int[]{3, 2, 3, 1, 2, 4, 5, 5, 6}, 4));
 
-        int[] array3 = new int[]{0, 1, 3, 2, 6, 5, 5, 8, 9, 10};
-        build(array3);
-        System.out.println(Arrays.toString(array3));
-
-        int[] array4 = new int[]{0, 1, 3, 2, 6, 5, 5, 8, 9, 10};
-        heapSort(array4);
-        System.out.println(Arrays.toString(array4));
-
-        System.out.println(findKthLargest(new int[]{3, 2, 3, 1, 2, 4, 5, 5, 6}, 4));
+        lastStoneWeight(new int[]{2, 7, 4, 1, 8, 1});
     }
 
     /**
@@ -152,5 +156,26 @@ public class TestHeapNode {
             downMiner(nums, 0, nums.length - 1 - i);
         }
         return 0;
+    }
+
+    /**
+     * 最后一块石头的重量
+     *
+     * @param stones
+     * @return
+     */
+    public static int lastStoneWeight(int[] stones) {
+        PriorityQueue<Integer> queue = new PriorityQueue<>((a, b) -> b - a);
+        for (int i = 0; i < stones.length; i++) {
+            queue.add(stones[i]);
+        }
+        while (queue.size() > 1) {
+            int a = queue.poll();
+            int b = queue.poll();
+            if (a != b) {
+                queue.add(Math.abs(a - b));
+            }
+        }
+        return queue.size() == 0 ? 0 : queue.peek();
     }
 }

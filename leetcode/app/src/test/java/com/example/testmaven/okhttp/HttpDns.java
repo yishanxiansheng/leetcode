@@ -22,7 +22,9 @@ import java.util.concurrent.TimeoutException;
 
 import javax.net.ssl.SNIHostName;
 
+import okhttp3.ConnectionPool;
 import okhttp3.Dns;
+import okhttp3.internal.connection.RealConnection;
 
 import static java.net.InetAddress.getAllByName;
 

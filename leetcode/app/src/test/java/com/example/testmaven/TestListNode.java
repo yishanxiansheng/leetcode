@@ -17,9 +17,9 @@ public class TestListNode {
     public static void main(String[] args) {
         ListNode node = new ListNode(1);
         node.next = new ListNode(2);
-        node.next.next = new ListNode(3);
-        node.next.next.next = new ListNode(4);
-        node.next.next.next.next = new ListNode(5);
+        node.next.next = new ListNode(2);
+        node.next.next.next = new ListNode(1);
+//        node.next.next.next.next = new ListNode(1);
         insertionSortList(node);
 
         MyStack queue = new MyStack();
@@ -30,6 +30,7 @@ public class TestListNode {
 
         PrintUtil.print(10 / 10);
         PrintUtil.print(10 % 10);
+        isPalindrome(node);
 
     }
 
@@ -504,6 +505,7 @@ public class TestListNode {
     }
 
     /**
+<<<<<<< HEAD
      * 删除链表的倒数第K个结点
      *
      * @param head
@@ -530,16 +532,38 @@ public class TestListNode {
             help = help.next;
         }
         pre.next = target.next;
-        return head;
-    }
-
-    /**
-     * 插入排序排序链表
-     * 链条没断开
+=======
+     * 删除有序链表的重复结点
      *
      * @param head
      * @return
      */
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode temp = head;
+        while (temp != null) {
+            ListNode next = temp;
+            while (next.next != null && next.next.val == temp.val) {
+                next = next.next;
+            }
+            temp.next = next.next;
+            temp = next.next;
+        }
+>>>>>>> callback
+        return head;
+    }
+
+    /**
+<<<<<<< HEAD
+     * 插入排序排序链表
+     * 链条没断开
+=======
+     * 判断是否是回文链表
+>>>>>>> callback
+     *
+     * @param head
+     * @return
+     */
+<<<<<<< HEAD
     public ListNode sortList(ListNode head) {
         if (head == null) {
             return null;
@@ -564,5 +588,64 @@ public class TestListNode {
             cur = lastNode.next;
         }
         return dummyNode.next;
+=======
+    public static boolean isPalindrome(ListNode head) {
+        ListNode middle = head;
+        ListNode right = head;
+        while (right != null && right.next != null) {
+            middle = middle.next;
+            right = right.next.next;
+        }
+
+        boolean isPalindrome = true;
+        ListNode a = reverseListNode(middle);
+        while (head != null && a != null) {
+            if (head.val != a.val) {
+                isPalindrome = false;
+                break;
+            }
+            head = head.next;
+            a = a.next;
+        }
+        return isPalindrome;
+    }
+
+    /**
+     * 判断两个链表是否相交
+     *
+     * @param headA
+     * @param headB
+     * @return
+     */
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode listNodeA = headA;
+        ListNode listNodeB = headB;
+        while (listNodeA != listNodeB) {
+            listNodeA = listNodeA == null ? headB : listNodeA.next;
+            listNodeB = listNodeB == null ? headA : listNodeB.next;
+        }
+        return listNodeA;
+    }
+
+    /**
+     * 倒数第k个指针
+     *
+     * @param head
+     * @param k
+     * @return
+     */
+    public int kthToLast(ListNode head, int k) {
+        ListNode fast = head;
+        ListNode slow = head;
+        while (k > 1 && fast != null) {
+            fast = fast.next;
+            k--;
+        }
+        while (fast != null && fast.next != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return slow.val;
+>>>>>>> callback
     }
 }
