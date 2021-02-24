@@ -23,10 +23,37 @@ public class TestTreeNode {
         TreeNode node2 = createBianryTree(linkedList);
         System.out.println(serialize(node2));
         preOrderTraveralWithStack(node2);
+
+        TreeNode node = sortedArrayToBST(new int[]{-10, -3, 0, 5, 9});
+    }
+
+    /**
+     * 有序数组转化为二叉搜索树
+     *
+     * @param nums
+     * @return
+     */
+    public static TreeNode sortedArrayToBST(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return null;
+        }
+        return sortedArrayToBSTHelper(nums, 0, nums.length - 1);
+    }
+
+    public static TreeNode sortedArrayToBSTHelper(int[] nums, int left, int right) {
+        if (left > right) {
+            return null;
+        }
+        int middle = (left + right) / 2;
+        TreeNode node = new TreeNode(nums[middle]);
+        node.left = sortedArrayToBSTHelper(nums, left, middle - 1);
+        node.right = sortedArrayToBSTHelper(nums, middle + 1, right);
+        return node;
     }
 
     /**
      * 前序遍历
+     *
      * @param treeNode
      */
     public static void preOrderTraveralWithStack(TreeNode treeNode) {
@@ -423,6 +450,42 @@ public class TestTreeNode {
     }
 
     /**
+     * 获取二叉树的最小深度
+     * 层序遍历遍历到的第一个叶子节点的深度就是最小深度
+     *
+     * @param root
+     * @return
+     */
+    public int minDepth(TreeNode root) {
+        LinkedList<TreeNode> treeNodes = new LinkedList<>();
+        if (root == null) {
+            return 0;
+        }
+        int result = 0;
+        treeNodes.add(root);
+        while (!treeNodes.isEmpty()) {
+            List<Integer> temp = new ArrayList<>();
+            result++;
+            int size = treeNodes.size();
+            while (size > 0) {
+                TreeNode top = treeNodes.pollFirst();
+                temp.add(top.val);
+                if (top.left != null) {
+                    treeNodes.add(top.left);
+                }
+                if (top.right != null) {
+                    treeNodes.add(top.right);
+                }
+                if (top.left == null && top.right == null) {
+                    return result;
+                }
+                size--;
+            }
+        }
+        return result;
+    }
+
+    /**
      * 层序遍历树,必须分层
      *
      * @param root
@@ -450,6 +513,8 @@ public class TestTreeNode {
                 }
                 size--;
             }
+            //从尾部依次插入
+//            result.add(0,temp);
             result.add(temp);
         }
         return result;
@@ -597,9 +662,27 @@ public class TestTreeNode {
         return list;
     }
 
+    //递归实现
+    List<Integer> DFSTraversal2 = new ArrayList<>();
+
+    public List<Integer> DFSTraversal2(TreeNode root) {
+        DFSTraversalHelper(root);
+        return DFSTraversal2;
+    }
+
+    public void DFSTraversalHelper(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        DFSTraversal2.add(root.val);
+        DFSTraversal2(root.left);
+        DFSTraversal2(root.right);
+    }
+
     /**
      * 广度优先搜索 利用队列实现
      * 其实就是层序遍历
+     *
      * @param root
      * @return
      */
@@ -623,9 +706,6 @@ public class TestTreeNode {
         }
         return list;
     }
-
-
-
 
     /**
      * 最近公共祖先   后续遍历
@@ -692,8 +772,6 @@ public class TestTreeNode {
         kthLargestHelper(root.right);
     }
 
-
-
     /**
      * 根据前序遍历以及中序遍历构建树
      *
@@ -750,8 +828,6 @@ public class TestTreeNode {
         }
     }
 
-
-
     /**
      * 中序遍历  非递归
      *
@@ -778,7 +854,6 @@ public class TestTreeNode {
         return list;
     }
 
-
     /**
      * 序列化二叉树
      *
@@ -791,6 +866,7 @@ public class TestTreeNode {
     public TreeNode deserialize(String data) {
         return null;
     }
+
     public static String serialize(TreeNode root) {
         result.append("[");
         serializeHelper(root);
@@ -808,4 +884,112 @@ public class TestTreeNode {
         serializeHelper(root.right);
     }
 
+    /**
+     * 二叉树的层平均值
+     *
+     * @param root
+     * @return
+     */
+    public List<Double> averageOfLevels(TreeNode root) {
+        List<Double> lists = new ArrayList<>();
+        LinkedList<TreeNode> stack = new LinkedList<>();
+        //这一层的结点的个数
+        int acount = 1;
+        //一层的总和
+        double total = 0;
+        stack.add(root);
+        while (!stack.isEmpty()) {
+            acount = stack.size();
+            total = 0;
+            int mAcount = acount;
+            while (acount > 0) {
+                TreeNode node = stack.pollFirst();
+                total += node.val;
+                if (node.left != null) {
+                    stack.add(node.left);
+                }
+                if (node.right != null) {
+                    stack.add(node.right);
+                }
+                acount--;
+            }
+            double a = total / mAcount;
+            lists.add(a);
+        }
+        return lists;
+    }
+
+    /**
+     * 两数之和
+     * 中序遍历加双指针
+     *
+     * @param root
+     * @param k
+     * @return
+     */
+    List<Integer> temp = new ArrayList<>();
+
+    public boolean findTarget(TreeNode root, int k) {
+        inOrder(root);
+        int left = 0, right = temp.size() - 1;
+        while (left < right) {
+            if (temp.get(left) + temp.get(right) == k) {
+                return true;
+            } else if (temp.get(left) + temp.get(right) > k) {
+                right--;
+            } else {
+                left++;
+            }
+        }
+        return false;
+    }
+
+    private void inOrder(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        inOrder(root.left);
+        temp.add(root.val);
+        inOrder(root.right);
+
+    }
+
+    /**
+     * 左叶子之和
+     *
+     * @param root
+     * @return
+     */
+    private int ss = 0;
+
+    public int sumOfLeftLeaves(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        if (root.left != null && root.left.left == null && root.left.right == null) {
+            ss += root.left.val;
+        }
+        sumOfLeftLeaves(root.left);
+        sumOfLeftLeaves(root.right);
+        return ss;
+    }
+
+    /**
+     * 路径总和
+     * 深度优先搜索（中序遍历）
+     * 递归
+     *
+     * @param root
+     * @param sum
+     * @return
+     */
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if (root == null) {
+            return false;
+        }
+        if (root.left == null && root.right == null && root.val == sum) {
+            return true;
+        }
+        return hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val);
+    }
 }

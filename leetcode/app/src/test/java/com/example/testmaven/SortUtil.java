@@ -31,6 +31,9 @@ public class SortUtil {
         int[] array5 = new int[]{72, 6, 57, 88, 60, 42, 83, 73, 48, 85};
         System.out.println(findMaxDiff(array5));
 
+        int[] array6 = new int[]{72, 6, 57, 88, 60, 42, 83, 73, 48, 85};
+        System.out.println(Arrays.toString(mergeSort(array6)));
+
 
     }
 
@@ -38,6 +41,7 @@ public class SortUtil {
     /**
      * 从小到大
      * 第一轮冒泡需要将最小的数据放在最上面
+     *
      * @param array
      */
     public static void bubbleSort2(int[] array) {
@@ -272,6 +276,60 @@ public class SortUtil {
             result = 0;
         }
         return max2;
+    }
+
+    /**
+     * 归并排序，从小到大
+     *
+     * @param nums
+     * @return
+     */
+    public static int[] mergeSort(int[] nums) {
+        mergeHelper(nums, 0, nums.length - 1);
+        return nums;
+    }
+
+    public static void mergeHelper(int[] nums, int left, int right) {
+        if (left >= right) {
+            return;
+        }
+        int middle = (left + right) / 2;
+        mergeHelper(nums, left, middle);
+        mergeHelper(nums, middle + 1, right);
+        merge(nums, left, right, middle);
+    }
+
+    /**
+     * 合并两个排好的数组
+     *
+     * @param nums
+     * @param left
+     * @param right
+     * @param middle
+     */
+    public static void merge(int[] nums, int left, int right, int middle) {
+        int i = left;
+        int j = middle + 1;
+        int[] temp = new int[right - left + 1];
+        int index = 0;
+        while (i <= middle && j <= right) {
+            if (nums[i] > nums[j]) {
+                temp[index++] = nums[j++];
+            } else {
+                temp[index++] = nums[i++];
+            }
+        }
+        while (i <= middle) {
+            temp[index++] = nums[i++];
+        }
+
+        while (j <= right) {
+            temp[index++] = nums[j++];
+        }
+        index = 0;
+        while (left <= right) {
+            nums[left++] = temp[index++];
+        }
     }
 
     /**
