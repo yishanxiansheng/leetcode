@@ -585,4 +585,74 @@ public class TestListNode {
         }
         return slow.val;
     }
+
+
+    /**
+     * 合并两个排序列表
+     *
+     * @param l1
+     * @param l2
+     * @return
+     */
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode head = new ListNode(-1);
+        ListNode pre = head;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                pre.next = l1;
+                pre = pre.next;
+                l1 = l1.next;
+            } else {
+                pre.next = l2;
+                pre = pre.next;
+                l2 = l2.next;
+            }
+        }
+        if (l1 != null) {
+            pre.next = l1;
+        }
+        if (l2 != null) {
+            pre.next = l2;
+        }
+        return head.next;
+    }
+
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(nums[i])) {
+                if (i - map.get(nums[i]) <= k) {
+                    return true;
+                } else {
+                    map.put(nums[i], i);
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 删除链表的结点
+     *
+     * @param head
+     * @param val
+     * @return
+     */
+    public ListNode deleteNode(ListNode head, int val) {
+        ListNode cur = head;
+        ListNode pre = null;
+        while (cur != null) {
+            if (cur.val == val) {
+                if (pre == null) {
+                    return cur.next;
+                } else {
+                    pre.next = cur.next;
+                }
+            } else {
+                pre = cur;
+                cur = cur.next;
+            }
+        }
+        return head;
+    }
 }

@@ -19,12 +19,13 @@ import java.util.Stack;
 public class TestTreeNode {
     public static void main(String[] args) {
         LinkedList<Integer> linkedList = new LinkedList<>(Arrays.asList(
-                new Integer[]{3, 2, 9, null, null, 10, null, 8, null, 4}));
+                new Integer[]{3, 9, 10, null, null, 15, 7}));
         TreeNode node2 = createBianryTree(linkedList);
         System.out.println(serialize(node2));
         preOrderTraveralWithStack(node2);
-
         TreeNode node = sortedArrayToBST(new int[]{-10, -3, 0, 5, 9});
+
+
     }
 
     /**
@@ -521,6 +522,43 @@ public class TestTreeNode {
     }
 
     /**
+     * 之字型遍历树
+     *
+     * @param root
+     * @return
+     */
+    public List<List<Integer>> levelOrder4(TreeNode root) {
+        List<List<Integer>> result = new ArrayList<>();
+        Deque<TreeNode> treeNodes = new ArrayDeque<>();
+        if (root == null) {
+            return result;
+        }
+        treeNodes.add(root);
+        int size = treeNodes.size();
+        while (!treeNodes.isEmpty()) {
+            List<Integer> temp = new ArrayList<>();
+            size = treeNodes.size();
+            Deque<TreeNode> tempStack = new ArrayDeque<>();
+            while (size > 0) {
+                TreeNode top = treeNodes.poll();
+                temp.add(top.val);
+                if (top.left != null) {
+                    tempStack.add(top.left);
+                }
+                if (top.right != null) {
+                    tempStack.add(top.right);
+                }
+                size--;
+            }
+            treeNodes = tempStack;
+            //从尾部依次插入
+//            result.add(0,temp);
+            result.add(temp);
+        }
+        return result;
+    }
+
+    /**
      * 层序遍历树 不分层只打印
      *
      * @param root
@@ -557,7 +595,7 @@ public class TestTreeNode {
      * @param root
      * @return
      */
-    public List<List<Integer>> levelOrder3(TreeNode root) {
+    public  static List<List<Integer>> levelOrder3(TreeNode root) {
         List<List<Integer>> result = new ArrayList<>();
         LinkedList<TreeNode> treeNodes = new LinkedList<>();
         if (root == null) {
@@ -600,21 +638,9 @@ public class TestTreeNode {
         if (root == null) {
             return null;
         }
-        Stack<TreeNode> stack = new Stack<>();
-        stack.add(root);
-        while (!stack.isEmpty()) {
-            TreeNode node = stack.pop();
-            if (node.left != null) {
-                stack.add(node.left);
-            }
-            if (node.right != null) {
-                stack.add(node.right);
-            }
-
-            TreeNode temp = node.left;
-            node.left = node.right;
-            node.right = temp;
-        }
+        TreeNode left = root.left;
+        root.left = mirrorTree(root.right);
+        root.right = mirrorTree(left);
         return root;
     }
 
@@ -849,7 +875,8 @@ public class TestTreeNode {
             root = root.right;
 
             //1、root 不为空的时候，将root的左结点依次入栈，最后出栈顶结点，进行打印
-            //2、root为空代表栈顶结点的右结点为空，说明
+            //2、root为空代表栈顶结点的右结点为空，说明这个节点下面的左右结点都已经遍历完，这个时候需要回到这个节点的父节点
+            //因为root为null，所以就开始遍历父节点的右结点了
         }
         return list;
     }

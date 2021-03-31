@@ -8,6 +8,11 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.noodle.leetcode.eventbus.MsgEvent;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 public class SecondActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,5 +30,10 @@ public class SecondActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void getMsg(MsgEvent event){
+
     }
 }

@@ -41,5 +41,11 @@ dependencies {
 
     compile 'com.github.bumptech.glide:glide:3.7.0'
 
+    implementation 'io.reactivex:rxjava:1.0.14'
+    implementation 'io.reactivex:rxandroid:1.0.1'
+    implementation 'org.greenrobot:eventbus:3.1.1'
 
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+
+    implementation 'com.snail:antifake:1.4'
 }

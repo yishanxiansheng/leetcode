@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * 字符串操作
@@ -16,13 +18,30 @@ public class TestString2 {
 
     public static void main(String[] args) {
 //        System.out.println(longestNiceSubstring("dDzeE"));
-        int[] a = new int[]{0,1};
-        int[] b = new int[]{0,0};
+        int[] a = new int[]{0, 1};
+        int[] b = new int[]{0, 0};
         int[][] c = new int[2][2];
         c[0] = a;
         c[1] = b;
-//        System.out.println(canChoose(c, new int[]{4978581, -4363542, 9212539, -6038177, 9212539, -5913070, 8296798, -9556545, 2540206, -468950, 4091738, -2988962, 1977436, 6468826, -5913070, -5416666, -9189639, 8299815, -1581790, 2859950, 6789680, -3127323, -7477258, 9102825, -6371451, 9144300}));
         highestPeak(c);
+    }
+
+
+    public static int longestPalindrome(String s) {
+        int result = 0;
+        Map<Character, Integer> hashmap = new HashMap<>();
+        char[] ss = s.toCharArray();
+        for (int i = 0; i < ss.length; i++) {
+            hashmap.put(ss[i], hashmap.getOrDefault(ss[i], 0) + 1);
+        }
+
+        for (Map.Entry<Character, Integer> entry : hashmap.entrySet()) {
+            result += entry.getValue() / 2 * 2;
+            if (entry.getValue() % 2 == 1 && result % 2 == 0) {
+                result++;
+            }
+        }
+        return result;
     }
 
 
@@ -35,7 +54,7 @@ public class TestString2 {
             for (int j = 0; j < isWater[0].length; j++) {
                 if (isWater[i][j] == 1) {
                     num++;
-                    res[i][j]=0;
+                    res[i][j] = 0;
                     ii[i][j] = true;
 //                    if (i - 1 >= 0 && !ii[i - 1][j]) {
 //                        res[i - 1][j] = 1;
@@ -70,25 +89,25 @@ public class TestString2 {
                 for (int j = 0; j < res[0].length; j++) {
                     if (res[i][j] == index) {
                         if (i - 1 >= 0 && !ii[i - 1][j]) {
-                            res[i - 1][j] = index+1;
+                            res[i - 1][j] = index + 1;
                             ii[i - 1][j] = true;
                             num++;
 
                         }
                         if (j - 1 >= 0 && !ii[i][j - 1]) {
-                            res[i][j - 1] = index+1;
+                            res[i][j - 1] = index + 1;
                             ii[i][j - 1] = true;
                             num++;
 
                         }
                         if (i + 1 < res.length && !ii[i + 1][j]) {
-                            res[i + 1][j] = index+1;
+                            res[i + 1][j] = index + 1;
                             ii[i + 1][j] = true;
                             num++;
 
                         }
                         if (j + 1 < res[0].length && !ii[i][j + 1]) {
-                            res[i][j + 1] = index+1;
+                            res[i][j + 1] = index + 1;
                             ii[i][j + 1] = true;
                             num++;
                         }
@@ -160,6 +179,25 @@ public class TestString2 {
                 if (s.contains((a + "").toLowerCase())) {
                     continue;
                 } else {
+                    return false;
+                }
+            }
+        }
+        CopyOnWriteArrayList<Integer> list = new CopyOnWriteArrayList<>();
+        list.add(1);
+        return true;
+    }
+
+    public boolean canPermutePalindrome(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            map.put(s.charAt(i), map.getOrDefault(s.charAt(i), 0) + 1);
+        }
+        int oldNum = 0;
+        for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+            if ((entry.getValue() & 1) != 0) {
+                oldNum++;
+                if (oldNum > 2) {
                     return false;
                 }
             }

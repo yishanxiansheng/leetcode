@@ -12,9 +12,9 @@ public class TestHeapNode {
         up(array);
         System.out.println(Arrays.toString(array));
 
-//        int[] array2 = new int[]{0, 1, 3, 2, 6, 5, 5, 8, 9, 10};
-//        downMiner(array2, 0, array2.length);
-//        System.out.println(Arrays.toString(array2));
+        int[] array2 = new int[]{0, 1, 3, 2, 6, 5, 5, 8, 9, 10};
+        downMiner(array2, 0, array2.length);
+        System.out.println(Arrays.toString(array2));
 //
 //        int[] array3 = new int[]{0, 1, 3, 2, 6, 5, 5, 8, 9, 10};
 //        build(array3);
@@ -24,9 +24,9 @@ public class TestHeapNode {
 //        heapSort(array4);
 //        System.out.println(Arrays.toString(array4));
 //
-//        System.out.println(findKthLargest(new int[]{3, 2, 3, 1, 2, 4, 5, 5, 6}, 4));
+        System.out.println(findKthLargest(new int[]{3, 2, 3, 1, 2, 4, 5, 5, 6}, 4));
 
-        lastStoneWeight(new int[]{2, 7, 4, 1, 8, 1});
+//        lastStoneWeight(new int[]{2, 7, 4, 1, 8, 1});
     }
 
     /**
@@ -67,13 +67,15 @@ public class TestHeapNode {
                 break;
             }
 
+            //将比父节点大的子节点上移
             if (heap[childIndex] > temp) {
-                heap[parentIndex] = heap[childIndex];
+                int data = heap[childIndex];
+                heap[childIndex]= heap[parentIndex];
+                heap[parentIndex] = data;
                 parentIndex = childIndex;
                 childIndex = parentIndex * 2 + 1;
             }
         }
-        heap[parentIndex] = temp;
     }
 
     /**
@@ -150,8 +152,8 @@ public class TestHeapNode {
             if (i == k - 1) {
                 return nums[0];
             }
-            int temp = nums[nums.length - 1];
-            nums[nums.length - 1] = nums[0];
+            int temp = nums[nums.length - i-1];
+            nums[nums.length - 1-i] = nums[0];
             nums[0] = temp;
             downMiner(nums, 0, nums.length - 1 - i);
         }

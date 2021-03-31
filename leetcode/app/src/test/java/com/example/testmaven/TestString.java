@@ -1,5 +1,7 @@
 package com.example.testmaven;
 
+import android.util.ArraySet;
+
 import com.example.testmaven.designmode.Main;
 
 import java.io.IOException;
@@ -8,8 +10,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 import okhttp3.Call;
@@ -580,5 +585,36 @@ public class TestString {
             indexT++;
         }
         return indexS == s.length();
+    }
+
+
+    public Set<Integer> set = new HashSet<>();
+
+    public int[] findMode(TreeNode root) {
+
+        findModeHelper(root);
+        int[] res = new int[set.size()];
+        Iterator<Integer> iterator = set.iterator();
+        int i = 0;
+        while (iterator.hasNext()) {
+            res[i++] = iterator.next();
+        }
+
+        return res;
+    }
+
+    public void findModeHelper(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        if (root.left != null && root.val == root.left.val) {
+            set.add(root.val);
+        }
+
+        if (root.right != null && root.val == root.right.val) {
+            set.add(root.val);
+        }
+        findModeHelper(root.left);
+        findModeHelper(root.right);
     }
 }

@@ -1,10 +1,14 @@
 package com.example.testmaven;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 /**
  * @author heshufan
@@ -15,6 +19,29 @@ public class TestArray2 {
     public static void main(String[] args) {
         longestOnes(new int[]{0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1}, 3);
         reversePairs(new int[]{1, 2, 1, 2, 1});
+        System.out.println(Arrays.toString(findRepeatNumber2(new int[]{1, 3, 0, 4, 2})));
+
+        dailyTemperatures(new int[]{73,74,75,71,69,72,76,73});
+    }
+
+
+    public static int[] dailyTemperatures(int[] T) {
+        int[] res = new int[T.length];
+        Deque<Integer> deque = new ArrayDeque<>();
+        for(int i = T.length - 1; i >= 0; i--){
+            if(deque.isEmpty()){
+                res[i] = 0;
+                deque.push(i);
+                continue;
+            }
+
+            while(!deque.isEmpty() && T[deque.peek()] < T[i]){
+                deque.pop();
+            }
+            res[i] = deque.isEmpty()? 0:deque.peek() - i;
+            deque.push(i);
+        }
+        return res;
     }
 
     /**
@@ -65,7 +92,7 @@ public class TestArray2 {
             j++;
         }
         index = 0;
-        while (left<=right) {
+        while (left <= right) {
             nums[left++] = temp[index++];
         }
     }
@@ -172,5 +199,120 @@ public class TestArray2 {
             }
         }
         return index == 3;
+    }
+
+    /**
+     * 数组中重复的数字
+     * 计数排序
+     *
+     * @param nums
+     * @return
+     */
+    public static int findRepeatNumber(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            while (nums[i] != i) {
+                if (nums[i] == nums[nums[i]]) {
+                    return nums[i];
+                }
+                int temp = nums[nums[i]];
+                nums[nums[i]] = nums[i];
+                nums[i] = temp;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * 加强版计数排序
+     * 计数排序
+     * 数据范围为0~n-1,数组长度为n，每个数据都不重复
+     *
+     * @param nums
+     * @return
+     */
+    public static int[] findRepeatNumber2(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            while (nums[i] != i) {
+                if (nums[i] != nums[nums[i]]) {
+                    int temp = nums[nums[i]];
+                    nums[nums[i]] = nums[i];
+                    nums[i] = temp;
+                }
+            }
+        }
+        return nums;
+    }
+
+    public List<Integer> findDuplicates(int[] nums) {
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            int m = Math.abs(nums[i]);
+            if (nums[m] < 0) {
+                list.add(nums[i]);
+            } else {
+                nums[m] = -nums[m];
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 数组中出现次数超过一半的数字
+     *
+     * @param nums
+     * @return
+     */
+    public int majorityElement(int[] nums) {
+        int var = 0;
+        int varNum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (varNum == 0 && var != nums[i]) {
+                var = nums[i];
+            }
+
+            if (varNum != 0 && var != nums[i]) {
+                varNum--;
+            }
+
+            if (var == nums[i]) {
+                varNum++;
+            }
+        }
+        return var;
+    }
+
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        //存储每门课的入度
+        int[] indegrees = new int[numCourses];
+
+        List<List<Integer>> adjacency = new ArrayList<>();
+
+        //BFS用队列
+        Queue<Integer> queue = new LinkedList<>();
+
+        for(int i = 0; i < numCourses; i++)
+            adjacency.add(new ArrayList<>());
+
+        for(int[] cp : prerequisites) {
+            //cp[1]为cp[0]学前需要学的课
+            indegrees[cp[0]]++;
+            //存储以cp[1]为入度的所有的课程
+            adjacency.get(cp[1]).add(cp[0]);
+        }
+        //所有入度为0的结点入队列
+        for(int i = 0; i < numCourses; i++)
+            if(indegrees[i] == 0) queue.add(i);
+        // BFS
+        while(!queue.isEmpty()) {
+            int pre = queue.poll();
+            numCourses--;
+            //取出所有以pre为前度的值，将他们的入度减1
+            for(int cur : adjacency.get(pre)){
+                if(--indegrees[cur] == 0){
+                    queue.add(cur);
+                }
+            }
+        }
+        return numCourses == 0;
     }
 }
