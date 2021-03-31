@@ -1,24 +1,22 @@
 package com.example.testmaven;
 
+import android.util.ArraySet;
+
 import com.example.testmaven.designmode.Main;
 
 import java.io.IOException;
-<<<<<<< HEAD
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-=======
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
->>>>>>> callback
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -514,20 +512,20 @@ public class TestString {
             ss1[s.charAt(i) - 'a']++;
             ss2[p.charAt(i) - 'a']++;
         }
-        if (matched(ss1, ss2)) {
+        if (matched2(ss1, ss2)) {
             res.add(0);
         }
         for (int i = 0; i < s.length() - p.length(); i++) {
             ss2[s.charAt(i + p.length()) - 'a']++;
             ss2[s.charAt(i) - 'a']--;
-            if (matched(ss1, ss2)) {
+            if (matched2(ss1, ss2)) {
                 res.add(i);
             }
         }
         return res;
     }
 
-    public boolean matched(int[] s1, int[] s2) {
+    public boolean matched2(int[] s1, int[] s2) {
         for (int i = 0; i < 26; i++) {
             if (s1[i] != s2[i]) {
                 return false;
@@ -591,99 +589,33 @@ public class TestString {
         return indexS == s.length();
     }
 
-    /**
-     * 最长的无重复子串
-     * 滑动窗口 左边界为left，右边界为i
-     * hashmapkey为字符，value为该字符出现最靠右的index
-     *
-     * @param s
-     * @return
-     */
-    public int lengthOfLongestSubstring(String s) {
-        int left = 0;
-        int max = 0;
-        HashMap<Character, Integer> hashMap = new HashMap<>();
-        for (int i = 0; i < s.toCharArray().length; i++) {
-            if (hashMap.containsKey(s.charAt(i))) {
-                //hashMap.get(s.charAt(i)) + 1查出来的值是有可能小于left，
-                // 所以要取最大值，保证滑动窗口是一直往右滑动的
-                left = Math.max(left, hashMap.get(s.charAt(i)) + 1);
-            }
-            hashMap.put(s.charAt(i), i);
-            max = Math.max(max, i - left + 1);
+    public Set<Integer> set = new HashSet<>();
+
+    public int[] findMode(TreeNode root) {
+
+        findModeHelper(root);
+        int[] res = new int[set.size()];
+        Iterator<Integer> iterator = set.iterator();
+        int i = 0;
+        while (iterator.hasNext()) {
+            res[i++] = iterator.next();
         }
-        return max;
+
+        return res;
     }
 
-
-    /**
-     * 字符串的排列
-     * s2中是否存在s1的全排列
-     * 也是用到滑动窗口模式
-     *
-     * @param s1
-     * @param s2
-     * @return
-     */
-    public boolean checkInclusion(String s1, String s2) {
-
-        if (s1.length() > s2.length()) {
-            return false;
+    public void findModeHelper(TreeNode root) {
+        if (root == null) {
+            return;
         }
-        //数组存放的是该字符出现的次数
-        int[] ss1 = new int[26];
-        int[] ss2 = new int[26];
-
-        for (int i = 0; i < s1.length(); i++) {
-            ss1[s1.charAt(i) - 'a']++;
-            ss2[s2.charAt(i) - 'a']++;
-        }
-        if (matched(ss1, ss2)) {
-            return true;
+        if (root.left != null && root.val == root.left.val) {
+            set.add(root.val);
         }
 
-        for (int i = 0; i < s2.length() - s1.length(); i++) {
-            ss2[s2.charAt(i + s1.length()) - 'a']++;
-            ss2[s2.charAt(i) - 'a']--;
-            if (matched(ss1, ss2)) {
-                return true;
-            }
+        if (root.right != null && root.val == root.right.val) {
+            set.add(root.val);
         }
-        return false;
-
-
-    }
-
-    public boolean matched(int[] s1, int[] s2) {
-        for (int i = 0; i < 26; i++) {
-            if (s1[i] != s2[i]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public int longestPalindromes(String s) {
-        int result = 0;
-        Map<Character, Integer> hashmap = new HashMap<>();
-        char[] ss = s.toCharArray();
-        for (int i = 0; i < ss.length; i++) {
-            hashmap.put(ss[i], hashmap.getOrDefault(ss[i], 0) + 1);
-        }
-
-        boolean hasOne = false;
-        int single = 0;
-        Set<Map.Entry<Character, Integer>> sets = hashmap.entrySet();
-        for (Map.Entry<Character, Integer> entry : sets) {
-            if (entry.getValue() % 2 == 0) {
-                result += entry.getValue();
-            } else {
-
-            }
-
-        }
-
-
-        return hasOne ? result + 1 : result;
+        findModeHelper(root.left);
+        findModeHelper(root.right);
     }
 }

@@ -1,6 +1,8 @@
 package com.example.testmaven;
 
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Stack;
 
 /**
@@ -10,7 +12,7 @@ import java.util.Stack;
 public class TestStack {
 
     public static void main(String[] args) {
-
+        validateStackSequences(new int[]{1, 2, 3, 4, 5}, new int[]{4, 5, 3, 2, 1});
     }
 
 
@@ -50,7 +52,7 @@ public class TestStack {
             return assistStack.peek();
         }
 
-        public int top() throws Exception{
+        public int top() throws Exception {
             if (mainStack.isEmpty()) {
                 throw new Exception("stack is empty");
             }
@@ -61,5 +63,31 @@ public class TestStack {
             }
             return result;
         }
+    }
+
+    /**
+     * 栈的压入弹出序列
+     *
+     * @param pushed
+     * @param popped
+     * @return
+     */
+    public static boolean validateStackSequences(int[] pushed, int[] popped) {
+        Deque<Integer> deque1 = new ArrayDeque<>();
+        int i = 0;
+        for (int j = 0; j < pushed.length; j++) {
+            deque1.push(pushed[j]);
+            while (!deque1.isEmpty() && (int) deque1.peek() == popped[i]) {
+                deque1.pop();
+                i++;
+            }
+        }
+        while (!deque1.isEmpty() && i < popped.length) {
+            if ((int) deque1.peek() == popped[i]) {
+                deque1.pop();
+            }
+            i++;
+        }
+        return deque1.isEmpty();
     }
 }

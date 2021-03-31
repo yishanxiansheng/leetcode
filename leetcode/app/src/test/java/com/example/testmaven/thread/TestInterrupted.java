@@ -1,5 +1,11 @@
 package com.example.testmaven.thread;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+
+import androidx.annotation.NonNull;
+
 /**
  * @author heshufan
  * @date 2021-01-14
@@ -12,6 +18,15 @@ public class TestInterrupted {
         thread.interrupt();
         thread.join();
         System.out.println("end");
+        Looper.prepare();
+        Handler handler = new Handler(){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+
+            }
+        };
+        Looper.loop();
+
     }
 
     static class MyThread extends Thread{
